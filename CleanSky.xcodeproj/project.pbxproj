@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		62D90E09A8C4E5A0ACAF7EB1 /* Pods_CleanSky.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B9570038F85400DA3DCAEBC /* Pods_CleanSky.framework */; };
 		926DBAE32281FC0000B58B00 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926DBAE22281FC0000B58B00 /* AppDelegate.swift */; };
 		926DBAE52281FC0000B58B00 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926DBAE42281FC0000B58B00 /* ViewController.swift */; };
 		926DBAE82281FC0000B58B00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 926DBAE62281FC0000B58B00 /* Main.storyboard */; };
@@ -15,6 +16,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B9570038F85400DA3DCAEBC /* Pods_CleanSky.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CleanSky.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		614D510A3BA4B233C8150B42 /* Pods-CleanSky.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CleanSky.release.xcconfig"; path = "Target Support Files/Pods-CleanSky/Pods-CleanSky.release.xcconfig"; sourceTree = "<group>"; };
 		926DBADF2281FC0000B58B00 /* CleanSky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CleanSky.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		926DBAE22281FC0000B58B00 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		926DBAE42281FC0000B58B00 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -22,6 +25,7 @@
 		926DBAE92281FC0200B58B00 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		926DBAEC2281FC0200B58B00 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		926DBAEE2281FC0200B58B00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D36797786896F22FACC2B228 /* Pods-CleanSky.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CleanSky.debug.xcconfig"; path = "Target Support Files/Pods-CleanSky/Pods-CleanSky.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +33,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62D90E09A8C4E5A0ACAF7EB1 /* Pods_CleanSky.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4004413E02E383FDD3BD312A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D36797786896F22FACC2B228 /* Pods-CleanSky.debug.xcconfig */,
+				614D510A3BA4B233C8150B42 /* Pods-CleanSky.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		926DBAD62281FC0000B58B00 = {
 			isa = PBXGroup;
 			children = (
 				926DBAE12281FC0000B58B00 /* CleanSky */,
 				926DBAE02281FC0000B58B00 /* Products */,
+				4004413E02E383FDD3BD312A /* Pods */,
+				A2ACE7936835AA04D15EFC9D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +81,14 @@
 			path = CleanSky;
 			sourceTree = "<group>";
 		};
+		A2ACE7936835AA04D15EFC9D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1B9570038F85400DA3DCAEBC /* Pods_CleanSky.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -71,9 +96,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 926DBAF12281FC0200B58B00 /* Build configuration list for PBXNativeTarget "CleanSky" */;
 			buildPhases = (
+				7A497B494482D1000686FE27 /* [CP] Check Pods Manifest.lock */,
 				926DBADB2281FC0000B58B00 /* Sources */,
 				926DBADC2281FC0000B58B00 /* Frameworks */,
 				926DBADD2281FC0000B58B00 /* Resources */,
+				0E06FC5DA2DEDD8F5B98D367 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -129,6 +156,53 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0E06FC5DA2DEDD8F5B98D367 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CleanSky/Pods-CleanSky-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Dropdowns/Dropdowns.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Dropdowns.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CleanSky/Pods-CleanSky-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7A497B494482D1000686FE27 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CleanSky-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		926DBADB2281FC0000B58B00 /* Sources */ = {
@@ -280,6 +354,7 @@
 		};
 		926DBAF22281FC0200B58B00 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D36797786896F22FACC2B228 /* Pods-CleanSky.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -292,12 +367,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = VladimirBrejcha.CleanSky;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		926DBAF32281FC0200B58B00 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 614D510A3BA4B233C8150B42 /* Pods-CleanSky.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -310,7 +386,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = VladimirBrejcha.CleanSky;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
