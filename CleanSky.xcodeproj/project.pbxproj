@@ -8,8 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		62D90E09A8C4E5A0ACAF7EB1 /* Pods_CleanSky.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B9570038F85400DA3DCAEBC /* Pods_CleanSky.framework */; };
+		925D2CE92282087500F14C2C /* WeatherDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D2CE82282087500F14C2C /* WeatherDataModel.swift */; };
+		925D2CED22820A7000F14C2C /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D2CEC22820A7000F14C2C /* SettingsViewController.swift */; };
 		926DBAE32281FC0000B58B00 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926DBAE22281FC0000B58B00 /* AppDelegate.swift */; };
-		926DBAE52281FC0000B58B00 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926DBAE42281FC0000B58B00 /* ViewController.swift */; };
+		926DBAE52281FC0000B58B00 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926DBAE42281FC0000B58B00 /* WeatherViewController.swift */; };
 		926DBAE82281FC0000B58B00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 926DBAE62281FC0000B58B00 /* Main.storyboard */; };
 		926DBAEA2281FC0200B58B00 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 926DBAE92281FC0200B58B00 /* Assets.xcassets */; };
 		926DBAED2281FC0200B58B00 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 926DBAEB2281FC0200B58B00 /* LaunchScreen.storyboard */; };
@@ -18,9 +20,11 @@
 /* Begin PBXFileReference section */
 		1B9570038F85400DA3DCAEBC /* Pods_CleanSky.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CleanSky.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		614D510A3BA4B233C8150B42 /* Pods-CleanSky.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CleanSky.release.xcconfig"; path = "Target Support Files/Pods-CleanSky/Pods-CleanSky.release.xcconfig"; sourceTree = "<group>"; };
+		925D2CE82282087500F14C2C /* WeatherDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataModel.swift; sourceTree = "<group>"; };
+		925D2CEC22820A7000F14C2C /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		926DBADF2281FC0000B58B00 /* CleanSky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CleanSky.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		926DBAE22281FC0000B58B00 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		926DBAE42281FC0000B58B00 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		926DBAE42281FC0000B58B00 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
 		926DBAE72281FC0000B58B00 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		926DBAE92281FC0200B58B00 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		926DBAEC2281FC0200B58B00 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -46,8 +50,42 @@
 				D36797786896F22FACC2B228 /* Pods-CleanSky.debug.xcconfig */,
 				614D510A3BA4B233C8150B42 /* Pods-CleanSky.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		925D2CE62282083700F14C2C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				926DBAEB2281FC0200B58B00 /* LaunchScreen.storyboard */,
+				926DBAE62281FC0000B58B00 /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		925D2CE72282084600F14C2C /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				926DBAE42281FC0000B58B00 /* WeatherViewController.swift */,
+				925D2CEC22820A7000F14C2C /* SettingsViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		925D2CEA2282087B00F14C2C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				925D2CE82282087500F14C2C /* WeatherDataModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		925D2CEB228208D600F14C2C /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				926DBAE92281FC0200B58B00 /* Assets.xcassets */,
+				926DBAEE2281FC0200B58B00 /* Info.plist */,
+			);
+			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
 		926DBAD62281FC0000B58B00 = {
@@ -72,11 +110,10 @@
 			isa = PBXGroup;
 			children = (
 				926DBAE22281FC0000B58B00 /* AppDelegate.swift */,
-				926DBAE42281FC0000B58B00 /* ViewController.swift */,
-				926DBAE62281FC0000B58B00 /* Main.storyboard */,
-				926DBAE92281FC0200B58B00 /* Assets.xcassets */,
-				926DBAEB2281FC0200B58B00 /* LaunchScreen.storyboard */,
-				926DBAEE2281FC0200B58B00 /* Info.plist */,
+				925D2CEA2282087B00F14C2C /* Model */,
+				925D2CE62282083700F14C2C /* View */,
+				925D2CE72282084600F14C2C /* Controller */,
+				925D2CEB228208D600F14C2C /* SupportingFiles */,
 			);
 			path = CleanSky;
 			sourceTree = "<group>";
@@ -167,13 +204,17 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CleanSky/Pods-CleanSky-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Dropdowns/Dropdowns.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Dropdowns.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -209,8 +250,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				926DBAE52281FC0000B58B00 /* ViewController.swift in Sources */,
+				926DBAE52281FC0000B58B00 /* WeatherViewController.swift in Sources */,
 				926DBAE32281FC0000B58B00 /* AppDelegate.swift in Sources */,
+				925D2CE92282087500F14C2C /* WeatherDataModel.swift in Sources */,
+				925D2CED22820A7000F14C2C /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,7 +402,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 29UN6WTSCZ;
-				INFOPLIST_FILE = CleanSky/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/CleanSky/SupportingFiles/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -378,7 +421,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 29UN6WTSCZ;
-				INFOPLIST_FILE = CleanSky/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/CleanSky/SupportingFiles/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

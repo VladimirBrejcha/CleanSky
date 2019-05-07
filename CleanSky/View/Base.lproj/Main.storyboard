@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Weather View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="CleanSky" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="WeatherViewController" customModule="CleanSky" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -28,15 +28,25 @@
                                     <constraint firstAttribute="width" constant="150" id="hEX-81-Yhz"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RBr-t7-L3T">
+                                <rect key="frame" x="186" y="275" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="akh-We-aOP" firstAttribute="top" secondItem="RBr-t7-L3T" secondAttribute="bottom" constant="33" id="0i5-8Y-S9f"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="yxL-bM-NPS" secondAttribute="trailing" id="5PW-lN-xXl"/>
                             <constraint firstItem="yxL-bM-NPS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="AcF-wg-lvf"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RBr-t7-L3T" secondAttribute="trailing" constant="186" id="YoW-U0-aEg"/>
                             <constraint firstItem="yxL-bM-NPS" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="dII-XJ-9Oq"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="yxL-bM-NPS" secondAttribute="bottom" id="o6i-6v-2BY"/>
                             <constraint firstItem="akh-We-aOP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="qXf-Z1-NYh"/>
                             <constraint firstItem="akh-We-aOP" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="rRe-T8-aaF"/>
+                            <constraint firstItem="RBr-t7-L3T" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="186" id="wZV-Iq-Jej"/>
+                            <constraint firstItem="RBr-t7-L3T" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="275" id="zrG-m9-Gv4"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -47,15 +57,19 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="currentWeatherImageView" destination="akh-We-aOP" id="E60-3g-XeB"/>
+                        <outlet property="currentWeatherLabel" destination="RBr-t7-L3T" id="LoL-zs-OHd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="966.66666666666674" y="137.94642857142856"/>
         </scene>
-        <!--View Controller-->
+        <!--Settings View Controller-->
         <scene sceneID="T1b-Ov-lTs">
             <objects>
-                <viewController id="057-3P-MX5" sceneMemberID="viewController">
+                <viewController id="057-3P-MX5" customClass="SettingsViewController" customModule="CleanSky" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="F2t-8W-T4N">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

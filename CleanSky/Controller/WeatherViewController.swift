@@ -8,10 +8,23 @@
 
 import UIKit
 import Dropdowns
+import Alamofire
+import SwiftyJSON
+import CoreLocation
 
-class ViewController: UIViewController {
+class WeatherViewController: UIViewController {
+    
+    //Constants
+//    let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
+//    let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
     let items = ["Moscow", "London", "New-York"]
+    
+    //instance variables
+    var weatherDataModel = WeatherDataModel()
 
+    @IBOutlet weak var currentWeatherImageView: UIImageView!
+    @IBOutlet weak var currentWeatherLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
