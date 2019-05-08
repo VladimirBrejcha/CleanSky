@@ -14,9 +14,10 @@ import SwiftyJSON
 class WeatherViewController: UIViewController {
     
     //Constants
-    let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
+    let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
     let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
     let items = ["Moscow", "London", "New York"]
+    let cityID = ["524901", "2643743", "5128581"]
     let titleView: TitleView? = nil
     
     //instance variables
@@ -73,15 +74,16 @@ class WeatherViewController: UIViewController {
     /***************************************************************/
     func updateWeatherData(json: JSON) {
         print(json)
-        if let temperature = json["main"]["temp"].double {
-            let city = json["name"].stringValue
-            let condition = json["weather"][0]["id"].intValue
+        if let temperature = json["list"][0]["main"]["temp"].double {
+            let city = json["city"]["name"].stringValue
+            let condition = json["list"][0]["weather"][0]["id"].intValue
             
             weatherDataModel.temperature = Int(temperature - 273.15)
             weatherDataModel.city = city
             weatherDataModel.condition = condition
             weatherDataModel.weatherIconName = weatherDataModel.updateWeatherIcon(condition: condition)
             updateUIWithWeatherData()
+            print(condition)
         } else {
             print("Error loading data")
         }
@@ -90,8 +92,8 @@ class WeatherViewController: UIViewController {
     }
     
     func changeCity(_ newCityIndex: Int) {
-        let city = items[newCityIndex]
-        let locationProperties: [String : String] = ["q" : city, "appid" : APP_ID]
+        let city = cityID[newCityIndex]
+        let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
         getWeatherData(url:WEATHER_URL, parameters: locationProperties)
     }
     
