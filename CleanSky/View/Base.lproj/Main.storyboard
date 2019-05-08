@@ -94,32 +94,42 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="settingsBackground" translatesAutoresizingMaskIntoConstraints="NO" id="oft-WE-ZJ2">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="GdR-5E-02O">
-                                <rect key="frame" x="18" y="354.5" width="378" height="187"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JGd-FW-cIb">
+                                <rect key="frame" x="20.5" y="355" width="373" height="186.5"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="celsius" highlightedImage="celsius_h" translatesAutoresizingMaskIntoConstraints="NO" id="IMA-aL-1fW">
-                                        <rect key="frame" x="0.0" y="0.0" width="186.5" height="187"/>
-                                    </imageView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fahrenheit" highlightedImage="fahrenheit_h" translatesAutoresizingMaskIntoConstraints="NO" id="I7q-rD-Sha">
-                                        <rect key="frame" x="191.5" y="0.0" width="186.5" height="187"/>
-                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kZI-vf-Tie">
+                                        <rect key="frame" x="0.0" y="0.0" width="186.5" height="186.5"/>
+                                        <state key="normal" image="celsius"/>
+                                        <state key="selected" image="celsius_h"/>
+                                        <connections>
+                                            <action selector="valueButtonAction:" destination="057-3P-MX5" eventType="touchUpInside" id="TnJ-xU-H6X"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XPl-Kc-ITC">
+                                        <rect key="frame" x="186.5" y="0.0" width="186.5" height="186.5"/>
+                                        <state key="normal" image="fahrenheit"/>
+                                        <state key="selected" image="fahrenheit_h"/>
+                                        <connections>
+                                            <action selector="valueButtonAction:" destination="057-3P-MX5" eventType="touchUpInside" id="Umw-pO-H6C"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="GdR-5E-02O" firstAttribute="centerY" secondItem="F2t-8W-T4N" secondAttribute="centerY" id="4bf-jw-4r0"/>
                             <constraint firstItem="2Cc-GX-0RS" firstAttribute="bottom" secondItem="oft-WE-ZJ2" secondAttribute="bottom" constant="-34" id="7Jo-Pc-mWm"/>
                             <constraint firstItem="2Cc-GX-0RS" firstAttribute="trailing" secondItem="oft-WE-ZJ2" secondAttribute="trailing" id="Tbf-n2-cGl"/>
+                            <constraint firstItem="JGd-FW-cIb" firstAttribute="centerX" secondItem="F2t-8W-T4N" secondAttribute="centerX" id="UGd-pY-452"/>
                             <constraint firstItem="oft-WE-ZJ2" firstAttribute="top" secondItem="2Cc-GX-0RS" secondAttribute="top" constant="-88" id="YLD-WW-V9z"/>
                             <constraint firstItem="oft-WE-ZJ2" firstAttribute="leading" secondItem="2Cc-GX-0RS" secondAttribute="leading" id="a1A-C2-eVH"/>
-                            <constraint firstItem="GdR-5E-02O" firstAttribute="centerX" secondItem="F2t-8W-T4N" secondAttribute="centerX" id="mGH-Ux-l3k"/>
+                            <constraint firstItem="JGd-FW-cIb" firstAttribute="centerY" secondItem="F2t-8W-T4N" secondAttribute="centerY" id="qa8-ea-TwO"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2Cc-GX-0RS"/>
                     </view>
                     <connections>
-                        <outlet property="celsiusImageView" destination="IMA-aL-1fW" id="Arh-M5-20a"/>
-                        <outlet property="fahrenheitImageView" destination="I7q-rD-Sha" id="PE7-gi-EUL"/>
+                        <outlet property="celsiusButton" destination="kZI-vf-Tie" id="kFQ-Rg-ZmJ"/>
+                        <outlet property="fahrenheitButton" destination="XPl-Kc-ITC" id="xKH-aw-63E"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lo5-IE-2MF" userLabel="First Responder" sceneMemberID="firstResponder"/>

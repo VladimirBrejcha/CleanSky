@@ -10,23 +10,27 @@ import UIKit
 
 class SettingsViewController: UIViewController {
 
-    @IBOutlet weak var celsiusImageView: UIImageView!
-    @IBOutlet weak var fahrenheitImageView: UIImageView!
+    @IBOutlet weak var celsiusButton: UIButton!
+    @IBOutlet weak var fahrenheitButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        celsiusButton.isSelected = true
 
-        // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func changeTemperatureValues() {
+        if celsiusButton.isSelected {
+            celsiusButton.isSelected = false
+            fahrenheitButton.isSelected = true
+        } else if fahrenheitButton.isSelected {
+            fahrenheitButton.isSelected = false
+            celsiusButton.isSelected = true
+        }
     }
-    */
-
+    
+    @IBAction func valueButtonAction(_ sender: UIButton) {
+        changeTemperatureValues()
+    }
+    
 }
