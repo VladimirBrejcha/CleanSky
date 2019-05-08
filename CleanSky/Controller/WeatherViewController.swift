@@ -43,7 +43,6 @@ class WeatherViewController: UIViewController {
     //MARK: - Controller life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupDropbox()
     }
     
@@ -100,7 +99,7 @@ class WeatherViewController: UIViewController {
     //MARK: - UI Updates
     /***************************************************************/
     func updateUIWithWeatherData() {
-        currentWeatherLabel.text = "\(weatherDataModel.temperature)"
+        currentWeatherLabel.text = "\(weatherDataModel.temperature)" + "°"
         currentWeatherImageView.image = UIImage(named: weatherDataModel.weatherIconName!)
     }
 

@@ -10,6 +10,8 @@ import UIKit
 
 class SettingsViewController: UIViewController {
 
+    @IBOutlet weak var celsiusImageView: UIImageView!
+    @IBOutlet weak var fahrenheitImageView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
 

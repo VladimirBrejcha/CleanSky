@@ -15,38 +15,55 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="WeatherViewController" customModule="CleanSky" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mainScreenBackground" translatesAutoresizingMaskIntoConstraints="NO" id="yxL-bM-NPS">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mainBackground" translatesAutoresizingMaskIntoConstraints="NO" id="yxL-bM-NPS">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="akh-We-aOP">
-                                <rect key="frame" x="132" y="329" width="150" height="150"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="Adm-Xv-1Fh"/>
-                                    <constraint firstAttribute="width" constant="150" id="hEX-81-Yhz"/>
-                                </constraints>
+                                <rect key="frame" x="102" y="368" width="210" height="210"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RBr-t7-L3T">
-                                <rect key="frame" x="186" y="275" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RBr-t7-L3T">
+                                <rect key="frame" x="206" y="240" width="181" height="120"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="100"/>
+                                <color key="textColor" red="0.12637259066104889" green="0.12639245390892029" blue="0.12636536359786987" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y5A-52-zCa">
+                                <rect key="frame" x="0.0" y="615" width="414" height="170"/>
+                                <subviews>
+                                    <view alpha="0.55000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="czw-rh-KbQ">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="170"/>
+                                        <color key="backgroundColor" red="0.12637259066104889" green="0.12639245390892029" blue="0.12636536359786987" alpha="1" colorSpace="calibratedRGB"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="czw-rh-KbQ" firstAttribute="leading" secondItem="Y5A-52-zCa" secondAttribute="leading" id="16c-lu-k7f"/>
+                                    <constraint firstAttribute="trailing" secondItem="czw-rh-KbQ" secondAttribute="trailing" id="8zv-rv-xUd"/>
+                                    <constraint firstAttribute="bottom" secondItem="czw-rh-KbQ" secondAttribute="bottom" id="W5X-mr-cRC"/>
+                                    <constraint firstItem="czw-rh-KbQ" firstAttribute="top" secondItem="Y5A-52-zCa" secondAttribute="top" id="aMN-D1-ZMT"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="akh-We-aOP" firstAttribute="top" secondItem="RBr-t7-L3T" secondAttribute="bottom" constant="33" id="0i5-8Y-S9f"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="yxL-bM-NPS" secondAttribute="trailing" id="5PW-lN-xXl"/>
+                            <constraint firstItem="akh-We-aOP" firstAttribute="top" secondItem="RBr-t7-L3T" secondAttribute="bottom" constant="8" id="A1J-dA-tBq"/>
                             <constraint firstItem="yxL-bM-NPS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="AcF-wg-lvf"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RBr-t7-L3T" secondAttribute="trailing" constant="186" id="YoW-U0-aEg"/>
-                            <constraint firstItem="yxL-bM-NPS" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="dII-XJ-9Oq"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="yxL-bM-NPS" secondAttribute="bottom" id="o6i-6v-2BY"/>
-                            <constraint firstItem="akh-We-aOP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="qXf-Z1-NYh"/>
-                            <constraint firstItem="akh-We-aOP" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="rRe-T8-aaF"/>
-                            <constraint firstItem="RBr-t7-L3T" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="186" id="wZV-Iq-Jej"/>
-                            <constraint firstItem="RBr-t7-L3T" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="275" id="zrG-m9-Gv4"/>
+                            <constraint firstItem="Y5A-52-zCa" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="FY0-hE-8sj"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="akh-We-aOP" secondAttribute="trailing" constant="102" id="LBN-Tb-LbP"/>
+                            <constraint firstItem="RBr-t7-L3T" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="152" id="So8-g0-Cn1"/>
+                            <constraint firstItem="Y5A-52-zCa" firstAttribute="top" secondItem="akh-We-aOP" secondAttribute="bottom" constant="37" id="VBs-6m-k3L"/>
+                            <constraint firstItem="yxL-bM-NPS" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="-88" id="dII-XJ-9Oq"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="akh-We-aOP" secondAttribute="bottom" constant="284" id="izy-C9-LUK"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RBr-t7-L3T" secondAttribute="trailing" constant="27" id="kWo-hq-A5u"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="yxL-bM-NPS" secondAttribute="bottom" constant="-34" id="o6i-6v-2BY"/>
+                            <constraint firstItem="RBr-t7-L3T" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="206" id="uwL-gV-XfB"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Y5A-52-zCa" secondAttribute="bottom" constant="77" id="ww2-aH-sdh"/>
+                            <constraint firstItem="akh-We-aOP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="102" id="x3L-o1-dbX"/>
+                            <constraint firstItem="Y5A-52-zCa" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="xAG-6p-piX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -66,27 +83,44 @@
             </objects>
             <point key="canvasLocation" x="966.66666666666674" y="137.94642857142856"/>
         </scene>
-        <!--Settings View Controller-->
+        <!--Settings-->
         <scene sceneID="T1b-Ov-lTs">
             <objects>
-                <viewController id="057-3P-MX5" customClass="SettingsViewController" customModule="CleanSky" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Settings" id="057-3P-MX5" customClass="SettingsViewController" customModule="CleanSky" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="F2t-8W-T4N">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="settingsScreenBackground" translatesAutoresizingMaskIntoConstraints="NO" id="oft-WE-ZJ2">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="settingsBackground" translatesAutoresizingMaskIntoConstraints="NO" id="oft-WE-ZJ2">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="GdR-5E-02O">
+                                <rect key="frame" x="18" y="354.5" width="378" height="187"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="celsius" highlightedImage="celsius_h" translatesAutoresizingMaskIntoConstraints="NO" id="IMA-aL-1fW">
+                                        <rect key="frame" x="0.0" y="0.0" width="186.5" height="187"/>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fahrenheit" highlightedImage="fahrenheit_h" translatesAutoresizingMaskIntoConstraints="NO" id="I7q-rD-Sha">
+                                        <rect key="frame" x="191.5" y="0.0" width="186.5" height="187"/>
+                                    </imageView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="2Cc-GX-0RS" firstAttribute="bottom" secondItem="oft-WE-ZJ2" secondAttribute="bottom" id="7Jo-Pc-mWm"/>
+                            <constraint firstItem="GdR-5E-02O" firstAttribute="centerY" secondItem="F2t-8W-T4N" secondAttribute="centerY" id="4bf-jw-4r0"/>
+                            <constraint firstItem="2Cc-GX-0RS" firstAttribute="bottom" secondItem="oft-WE-ZJ2" secondAttribute="bottom" constant="-34" id="7Jo-Pc-mWm"/>
                             <constraint firstItem="2Cc-GX-0RS" firstAttribute="trailing" secondItem="oft-WE-ZJ2" secondAttribute="trailing" id="Tbf-n2-cGl"/>
-                            <constraint firstItem="oft-WE-ZJ2" firstAttribute="top" secondItem="2Cc-GX-0RS" secondAttribute="top" id="YLD-WW-V9z"/>
+                            <constraint firstItem="oft-WE-ZJ2" firstAttribute="top" secondItem="2Cc-GX-0RS" secondAttribute="top" constant="-88" id="YLD-WW-V9z"/>
                             <constraint firstItem="oft-WE-ZJ2" firstAttribute="leading" secondItem="2Cc-GX-0RS" secondAttribute="leading" id="a1A-C2-eVH"/>
+                            <constraint firstItem="GdR-5E-02O" firstAttribute="centerX" secondItem="F2t-8W-T4N" secondAttribute="centerX" id="mGH-Ux-l3k"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2Cc-GX-0RS"/>
                     </view>
+                    <connections>
+                        <outlet property="celsiusImageView" destination="IMA-aL-1fW" id="Arh-M5-20a"/>
+                        <outlet property="fahrenheitImageView" destination="I7q-rD-Sha" id="PE7-gi-EUL"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lo5-IE-2MF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -97,12 +131,12 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZPk-4N-rcQ" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="sVQ-kF-9TF">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="sVQ-kF-9TF">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <textAttributes key="titleTextAttributes">
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textColor" red="0.12637259066104889" green="0.12639245390892029" blue="0.12636536359786987" alpha="1" colorSpace="calibratedRGB"/>
                         </textAttributes>
                         <textAttributes key="largeTitleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -119,9 +153,13 @@
         </scene>
     </scenes>
     <resources>
-        <image name="mainScreenBackground" width="2726" height="4846"/>
+        <image name="celsius" width="186.66667175292969" height="186.66667175292969"/>
+        <image name="celsius_h" width="186.66667175292969" height="186.66667175292969"/>
+        <image name="fahrenheit" width="186.66667175292969" height="186.66667175292969"/>
+        <image name="fahrenheit_h" width="186.66667175292969" height="186.66667175292969"/>
+        <image name="mainBackground" width="2726" height="4846"/>
+        <image name="settingsBackground" width="4000" height="6000"/>
         <image name="settingsButton" width="24" height="24"/>
-        <image name="settingsScreenBackground" width="4000" height="6000"/>
     </resources>
-    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+    <color key="tintColor" red="0.12637259066104889" green="0.12639245390892029" blue="0.12636536359786987" alpha="1" colorSpace="calibratedRGB"/>
 </document>
