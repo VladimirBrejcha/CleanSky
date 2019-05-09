@@ -21,9 +21,11 @@ class SettingsViewController: UIViewController {
     
     func changeTemperatureValues() {
         if celsiusButton.isSelected {
+            WeatherViewController.userDefaults.set("fahrenheit", forKey: "temperatureValue")
             celsiusButton.isSelected = false
             fahrenheitButton.isSelected = true
         } else if fahrenheitButton.isSelected {
+            WeatherViewController.userDefaults.set("celsius", forKey: "temperatureValue")
             fahrenheitButton.isSelected = false
             celsiusButton.isSelected = true
         }

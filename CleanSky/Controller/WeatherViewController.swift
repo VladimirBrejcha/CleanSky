@@ -14,6 +14,7 @@ import SwiftyJSON
 class WeatherViewController: UIViewController {
     
     //Constants
+    static let userDefaults = UserDefaults.standard
     let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
     let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
     let items = ["Moscow", "London", "New York"]
@@ -45,6 +46,10 @@ class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDropbox()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        changeTemperatureValue()
     }
     
     //MARK: - Networking
@@ -95,6 +100,19 @@ class WeatherViewController: UIViewController {
         let city = cityID[newCityIndex]
         let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
         getWeatherData(url:WEATHER_URL, parameters: locationProperties)
+    }
+    
+    func changeTemperatureValue() {
+        if let currentTemperatureValue = WeatherViewController.userDefaults.string(forKey: "temperatureValue") {
+            switch currentTemperatureValue {
+            case "celsius":
+                print(1)
+            case "fahrenheit":
+                print(2)
+            default:
+                print(3)
+            }
+        }
     }
     
     
