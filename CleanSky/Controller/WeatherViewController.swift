@@ -27,14 +27,17 @@ class WeatherViewController: UIViewController {
     //Outlets
     @IBOutlet weak var currentWeatherImageView: UIImageView!
     @IBOutlet weak var currentWeatherLabel: UILabel!
+    @IBOutlet weak var settingsContainerView: UIView!
     
     
     fileprivate func setupDropbox() {
         let titleView = TitleView(navigationController: navigationController!, title: "City", items: items)
-        Config.ArrowButton.Text.selectedColor = .black
-        Config.List.DefaultCell.Text.color = .black
-        Config.List.DefaultCell.separatorColor = .gray
-        Config.List.backgroundColor = .white
+        Config.ArrowButton.Text.selectedColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        Config.List.DefaultCell.Text.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        Config.ArrowButton.Text.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        Config.topLineColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        Config.List.DefaultCell.separatorColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        Config.List.backgroundColor = #colorLiteral(red: 0.926155746, green: 0.9410773516, blue: 0.9455420375, alpha: 0.09754922945)
         titleView?.action = { [weak self] index in
             self?.changeCity(index)
         }
@@ -45,11 +48,20 @@ class WeatherViewController: UIViewController {
     //MARK: - Controller life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.view.backgroundColor = .clear
+        settingsContainerView.layer.cornerRadius = 20
         setupDropbox()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         changeTemperatureValue()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        setupDropbox()
     }
     
     //MARK: - Networking
@@ -123,7 +135,10 @@ class WeatherViewController: UIViewController {
         currentWeatherImageView.image = UIImage(named: weatherDataModel.weatherIconName!)
     }
 
-
+    @IBAction func settingsButtonAction(_ sender: UIBarButtonItem) {
+        settingsContainerView.isHidden = false
+    }
+    
 }
 
 
