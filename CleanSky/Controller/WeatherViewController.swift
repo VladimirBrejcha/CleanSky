@@ -20,6 +20,7 @@ class WeatherViewController: UIViewController {
     private let cityNameArray = ["Moscow", "London", "New York"]
     private let cityIDArray = ["524901", "2643743", "5128581"] //todo
     private let titleView: TitleView? = nil
+    private let currentCity = WeatherViewController.userDefaults.string(forKey: "City")
     
     //instance variables
     private var weatherDataModel = WeatherDataModel()
@@ -39,7 +40,7 @@ class WeatherViewController: UIViewController {
         navigationController?.view.backgroundColor = .clear
         settingsContainerView.layer.cornerRadius = 20
         setupDropbox()
-        setCity()
+        setCity(currentCity ?? "default")
         setTemperatureValueSlider()
     }
     
@@ -93,14 +94,17 @@ class WeatherViewController: UIViewController {
         }
     }
     
-    func setCity() {
-        switch WeatherViewController.userDefaults.string(forKey: "City") {
-        case "Moscow":
-            print("Moscow")
-        case "London":
-            print("London")
-        case "New York":
-            print("New yourk")
+    func setCity(_ newcity: String) {
+        switch newcity {
+        case cityIDArray[0]:
+            let locationProperties: [String : String] = ["id" : newcity, "appid" : APP_ID]
+            getWeatherData(url:WEATHER_URL, parameters: locationProperties)
+        case cityIDArray[1]:
+            let locationProperties: [String : String] = ["id" : newcity, "appid" : APP_ID]
+            getWeatherData(url:WEATHER_URL, parameters: locationProperties)
+        case cityIDArray[2]:
+            let locationProperties: [String : String] = ["id" : newcity, "appid" : APP_ID]
+            getWeatherData(url:WEATHER_URL, parameters: locationProperties)
         default:
             print("wasntset")
         }
@@ -109,11 +113,11 @@ class WeatherViewController: UIViewController {
     
     func changeCity(_ newCityIndex: Int) {
         let city = cityIDArray[newCityIndex]
-        let cityName = cityNameArray[newCityIndex]
+//        let cityName = cityNameArray[newCityIndex]
         let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
         getWeatherData(url:WEATHER_URL, parameters: locationProperties)
-        WeatherViewController.userDefaults.set(cityName, forKey: "City")
-        setCity()
+        WeatherViewController.userDefaults.set(city, forKey: "City")
+        setCity(city)
     }
     
     //MARK: - JSON Parsing
