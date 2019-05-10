@@ -17,10 +17,11 @@ class WeatherViewController: UIViewController {
     static let userDefaults = UserDefaults.standard
     private let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
     private let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
+    
     private let cityNameArray = ["Moscow", "London", "New York"]
-    private let cityIDArray = ["524901", "2643743", "5128581"] //todo
+    private let cityIDArray = ["524901", "2643743", "5128581"]
     private let titleView: TitleView? = nil
-    private let currentCity = WeatherViewController.userDefaults.string(forKey: "City")
+    private let currentCityID = WeatherViewController.userDefaults.string(forKey: "CityID")
     
     //instance variables
     private var weatherDataModel = WeatherDataModel()
@@ -40,8 +41,9 @@ class WeatherViewController: UIViewController {
         navigationController?.view.backgroundColor = .clear
         settingsContainerView.layer.cornerRadius = 20
         setupDropbox()
-        setCity(currentCity ?? "default")
+        setCity(currentCityID ?? "524901")
         setTemperatureValueSlider()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,7 +60,9 @@ class WeatherViewController: UIViewController {
         Config.List.DefaultCell.separatorColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.List.backgroundColor = #colorLiteral(red: 0.926155746, green: 0.9410773516, blue: 0.9455420375, alpha: 0.09754922945)
         titleView?.action = { [weak self] index in
-            self?.changeCity(index)
+            let city = self?.cityIDArray[index]
+            self?.setCity(city!)
+            
         }
         navigationItem.titleView = titleView
     }
@@ -94,30 +98,12 @@ class WeatherViewController: UIViewController {
         }
     }
     
-    func setCity(_ newcity: String) {
-        switch newcity {
-        case cityIDArray[0]:
-            let locationProperties: [String : String] = ["id" : newcity, "appid" : APP_ID]
-            getWeatherData(url:WEATHER_URL, parameters: locationProperties)
-        case cityIDArray[1]:
-            let locationProperties: [String : String] = ["id" : newcity, "appid" : APP_ID]
-            getWeatherData(url:WEATHER_URL, parameters: locationProperties)
-        case cityIDArray[2]:
-            let locationProperties: [String : String] = ["id" : newcity, "appid" : APP_ID]
-            getWeatherData(url:WEATHER_URL, parameters: locationProperties)
-        default:
-            print("wasntset")
-        }
-        
-    }
-    
-    func changeCity(_ newCityIndex: Int) {
-        let city = cityIDArray[newCityIndex]
-//        let cityName = cityNameArray[newCityIndex]
+    func setCity(_ city: String) {
         let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
         getWeatherData(url:WEATHER_URL, parameters: locationProperties)
         WeatherViewController.userDefaults.set(city, forKey: "City")
-        setCity(city)
+        //TODO: fix titleview at first load
+//        titleView?.button.label.text = currentCityID
     }
     
     //MARK: - JSON Parsing
