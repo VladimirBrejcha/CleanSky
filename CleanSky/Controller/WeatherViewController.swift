@@ -17,8 +17,8 @@ class WeatherViewController: UIViewController {
     static let userDefaults = UserDefaults.standard
     private let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
     private let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
-    private let items = ["Moscow", "London", "New York"]
-    private let cityID = ["524901", "2643743", "5128581"] //todo
+    private let cityNameArray = ["Moscow", "London", "New York"]
+    private let cityIDArray = ["524901", "2643743", "5128581"] //todo
     private let titleView: TitleView? = nil
     
     //instance variables
@@ -39,6 +39,8 @@ class WeatherViewController: UIViewController {
         navigationController?.view.backgroundColor = .clear
         settingsContainerView.layer.cornerRadius = 20
         setupDropbox()
+        setCity()
+        setTemperatureValueSlider()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -47,7 +49,7 @@ class WeatherViewController: UIViewController {
     
     //MARK: - UIsetup methods
     fileprivate func setupDropbox() {
-        let titleView = TitleView(navigationController: navigationController!, title: "City", items: items)
+        let titleView = TitleView(navigationController: navigationController!, title: "City", items: cityNameArray)
         Config.ArrowButton.Text.selectedColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.List.DefaultCell.Text.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.ArrowButton.Text.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -58,6 +60,14 @@ class WeatherViewController: UIViewController {
             self?.changeCity(index)
         }
         navigationItem.titleView = titleView
+    }
+    
+    func setTemperatureValueSlider() {
+        if WeatherViewController.userDefaults.string(forKey: "temperatureValue") == "f" {
+            temperatureValueSettingsSwitch.isOn = true
+        } else {
+            temperatureValueSettingsSwitch.isOn = false
+        }
     }
     
     //MARK: - Networking
@@ -83,10 +93,27 @@ class WeatherViewController: UIViewController {
         }
     }
     
+    func setCity() {
+        switch WeatherViewController.userDefaults.string(forKey: "City") {
+        case "Moscow":
+            print("Moscow")
+        case "London":
+            print("London")
+        case "New York":
+            print("New yourk")
+        default:
+            print("wasntset")
+        }
+        
+    }
+    
     func changeCity(_ newCityIndex: Int) {
-        let city = cityID[newCityIndex]
+        let city = cityIDArray[newCityIndex]
+        let cityName = cityNameArray[newCityIndex]
         let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
         getWeatherData(url:WEATHER_URL, parameters: locationProperties)
+        WeatherViewController.userDefaults.set(cityName, forKey: "City")
+        setCity()
     }
     
     //MARK: - JSON Parsing
@@ -114,10 +141,10 @@ class WeatherViewController: UIViewController {
     func changeTemperatureValue(_ temperatureValue: Bool) {
         if temperatureValue {
             WeatherViewController.userDefaults.set("c", forKey: "temperatureValue")
-                    currentWeatherLabel.text = "\(weatherDataModel.returningTemperature)" + "°"
+            currentWeatherLabel.text = "\(weatherDataModel.returningTemperature)" + "°"
         } else {
             WeatherViewController.userDefaults.set("f", forKey: "temperatureValue")
-                    currentWeatherLabel.text = "\(weatherDataModel.returningTemperature)" + "°"
+            currentWeatherLabel.text = "\(weatherDataModel.returningTemperature)" + "°"
         }
     }
     
