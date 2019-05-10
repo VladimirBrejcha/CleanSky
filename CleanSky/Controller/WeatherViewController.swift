@@ -100,7 +100,7 @@ class WeatherViewController: UIViewController {
             weatherDataModel.temperature = Int(temperature - 273.15)
             weatherDataModel.city = city
             weatherDataModel.condition = condition
-            weatherDataModel.weatherIconName = weatherDataModel.updateWeatherIcon(condition: condition)
+//            weatherDataModel.weatherIconName = weatherDataModel.updateWeatherIcon(condition: condition)
             updateUIWithWeatherData()
             print(condition)
         } else {
@@ -113,9 +113,11 @@ class WeatherViewController: UIViewController {
     //MARK: - user interaction methods
     func changeTemperatureValue(_ temperatureValue: Bool) {
         if temperatureValue {
-            print("temp set to c")
+            WeatherViewController.userDefaults.set("c", forKey: "temperatureValue")
+                    currentWeatherLabel.text = "\(weatherDataModel.returningTemperature)" + "°"
         } else {
-            print("temp set to f")
+            WeatherViewController.userDefaults.set("f", forKey: "temperatureValue")
+                    currentWeatherLabel.text = "\(weatherDataModel.returningTemperature)" + "°"
         }
     }
     
@@ -145,7 +147,7 @@ class WeatherViewController: UIViewController {
     //MARK: - UI Updates
     /***************************************************************/
     func updateUIWithWeatherData() {
-        currentWeatherLabel.text = "\(weatherDataModel.temperature)" + "°"
+        currentWeatherLabel.text = "\(weatherDataModel.returningTemperature)" + "°"
 //        currentWeatherImageView.image = UIImage(named: weatherDataModel.weatherIconName!)
     }
 

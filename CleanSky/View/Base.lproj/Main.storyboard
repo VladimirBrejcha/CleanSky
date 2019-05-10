@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="-24" width="375" height="725"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="t°" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RBr-t7-L3T">
-                                <rect key="frame" x="131" y="135" width="142" height="120"/>
+                                <rect key="frame" x="20" y="135" width="325" height="120"/>
                                 <fontDescription key="fontDescription" type="system" weight="thin" pointSize="100"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -103,7 +103,7 @@
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="yxL-bM-NPS" secondAttribute="trailing" id="5PW-lN-xXl"/>
                             <constraint firstItem="Y5A-52-zCa" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="66F-zZ-TEH"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RBr-t7-L3T" secondAttribute="trailing" constant="102" id="6xq-A2-aXz"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RBr-t7-L3T" secondAttribute="trailing" constant="30" id="6xq-A2-aXz"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Y5A-52-zCa" secondAttribute="bottom" constant="50" id="86a-bh-NO1"/>
                             <constraint firstItem="yxL-bM-NPS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="AcF-wg-lvf"/>
                             <constraint firstItem="Y5A-52-zCa" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="B5P-FT-q6z"/>
@@ -114,7 +114,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jUg-wH-e42" secondAttribute="trailing" constant="20" id="jbS-sC-JFy"/>
                             <constraint firstItem="jUg-wH-e42" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="kUc-XJ-loA"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="yxL-bM-NPS" secondAttribute="bottom" constant="-34" id="o6i-6v-2BY"/>
-                            <constraint firstItem="RBr-t7-L3T" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="131" id="pMV-ak-Zzo"/>
+                            <constraint firstItem="RBr-t7-L3T" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="pMV-ak-Zzo"/>
                             <constraint firstItem="yYb-Hy-o9i" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="9" id="u8W-pU-yiu"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

@@ -12,9 +12,22 @@ class WeatherDataModel {
     
     //model variables
     var temperature = 0
+    
+    var returningTemperature: Int {
+        get {
+            if WeatherViewController.userDefaults.string(forKey: "temperatureValue") == "f" {
+                let updatedTemperature = (temperature * 9 / 5) + 32
+                return updatedTemperature
+                //                (0°C × 9/5) + 32
+            } else {
+                return temperature
+            }
+        }
+    }
+    
     var condition = 0
     var city: String?
-    var weatherIconName: String?
+//    var weatherIconName: String?
     
     //This method turns a condition code into the name of the weather condition image
     
