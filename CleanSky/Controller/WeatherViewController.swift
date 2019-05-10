@@ -15,21 +15,37 @@ class WeatherViewController: UIViewController {
     
     //Constants
     static let userDefaults = UserDefaults.standard
-    let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
-    let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
-    let items = ["Moscow", "London", "New York"]
-    let cityID = ["524901", "2643743", "5128581"]
-    let titleView: TitleView? = nil
+    private let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
+    private let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
+    private let items = ["Moscow", "London", "New York"]
+    private let cityID = ["524901", "2643743", "5128581"] //todo
+    private let titleView: TitleView? = nil
     
     //instance variables
-    var weatherDataModel = WeatherDataModel()
+    private var weatherDataModel = WeatherDataModel()
 
     //Outlets
-    @IBOutlet weak var currentWeatherImageView: UIImageView!
     @IBOutlet weak var currentWeatherLabel: UILabel!
     @IBOutlet weak var settingsContainerView: UIView!
+    @IBOutlet weak var temperatureValueSettingsSwitch: UISwitch!
     
     
+    //MARK: - Controller life cycle methods
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.view.backgroundColor = .clear
+        settingsContainerView.layer.cornerRadius = 20
+        setupDropbox()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        setupDropbox()
+    }
+    
+    //MARK: - UIsetup methods
     fileprivate func setupDropbox() {
         let titleView = TitleView(navigationController: navigationController!, title: "City", items: items)
         Config.ArrowButton.Text.selectedColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -41,27 +57,7 @@ class WeatherViewController: UIViewController {
         titleView?.action = { [weak self] index in
             self?.changeCity(index)
         }
-        
         navigationItem.titleView = titleView
-    }
-    
-    //MARK: - Controller life cycle methods
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
-        self.navigationController?.view.backgroundColor = .clear
-        settingsContainerView.layer.cornerRadius = 20
-        setupDropbox()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        changeTemperatureValue()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        setupDropbox()
     }
     
     //MARK: - Networking
@@ -87,6 +83,12 @@ class WeatherViewController: UIViewController {
         }
     }
     
+    func changeCity(_ newCityIndex: Int) {
+        let city = cityID[newCityIndex]
+        let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
+        getWeatherData(url:WEATHER_URL, parameters: locationProperties)
+    }
+    
     //MARK: - JSON Parsing
     /***************************************************************/
     func updateWeatherData(json: JSON) {
@@ -108,37 +110,46 @@ class WeatherViewController: UIViewController {
         
     }
     
-    func changeCity(_ newCityIndex: Int) {
-        let city = cityID[newCityIndex]
-        let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
-        getWeatherData(url:WEATHER_URL, parameters: locationProperties)
-    }
-    
-    func changeTemperatureValue() {
-        if let currentTemperatureValue = WeatherViewController.userDefaults.string(forKey: "temperatureValue") {
-            switch currentTemperatureValue {
-            case "celsius":
-                print(1)
-            case "fahrenheit":
-                print(2)
-            default:
-                print(3)
-            }
+    //MARK: - user interaction methods
+    func changeTemperatureValue(_ temperatureValue: Bool) {
+        if temperatureValue {
+            print("temp set to c")
+        } else {
+            print("temp set to f")
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first
+        if touch?.view != settingsContainerView {
+            settingsContainerView.isHidden = true
+        }
+    }
+    
+    @IBAction func settingsButtonAction(_ sender: UIBarButtonItem) {
+        if settingsContainerView.isHidden == true {
+            settingsContainerView.isHidden = false
+        } else {
+            settingsContainerView.isHidden = true
+        }
+    }
+    
+    @IBAction func temperatureValueSliderAction(_ sender: UISwitch) {
+        if temperatureValueSettingsSwitch.isOn {
+            changeTemperatureValue(false)
+        } else if temperatureValueSettingsSwitch.isOn == false {
+            changeTemperatureValue(true)
+        }
+    }
     
     //MARK: - UI Updates
     /***************************************************************/
     func updateUIWithWeatherData() {
         currentWeatherLabel.text = "\(weatherDataModel.temperature)" + "°"
-        currentWeatherImageView.image = UIImage(named: weatherDataModel.weatherIconName!)
+//        currentWeatherImageView.image = UIImage(named: weatherDataModel.weatherIconName!)
     }
 
-    @IBAction func settingsButtonAction(_ sender: UIBarButtonItem) {
-        settingsContainerView.isHidden = false
-    }
-    
+
 }
 
 

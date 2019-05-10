@@ -73,8 +73,13 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SQg-EY-vl5">
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="SQg-EY-vl5">
                                         <rect key="frame" x="59" y="24" width="49" height="31"/>
+                                        <color key="onTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="thumbTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <action selector="temperatureValueSliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="Ijv-fB-gyM"/>
+                                        </connections>
                                     </switch>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -124,6 +129,7 @@
                     <connections>
                         <outlet property="currentWeatherLabel" destination="RBr-t7-L3T" id="LoL-zs-OHd"/>
                         <outlet property="settingsContainerView" destination="yYb-Hy-o9i" id="VhF-6p-kEG"/>
+                        <outlet property="temperatureValueSettingsSwitch" destination="SQg-EY-vl5" id="drv-il-4yN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -153,7 +159,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z5H-S4-YwI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="56.521739130434788" y="137.94642857142856"/>
+            <point key="canvasLocation" x="126" y="137"/>
         </scene>
     </scenes>
     <resources>
