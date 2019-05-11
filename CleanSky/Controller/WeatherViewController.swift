@@ -23,9 +23,8 @@ class WeatherViewController: UIViewController {
     private let cityNameArray = ["Moscow", "London", "New York"]
     private let cityIDArray = ["524901", "2643743", "5128581"]
     private let cityImageArray = ["524901" : #imageLiteral(resourceName: "Moscow"), "2643743" : #imageLiteral(resourceName: "London"), "5128581" : #imageLiteral(resourceName: "New York")]
-    private let titleView: TitleView? = nil
+    private var titleView: TitleView? = nil
     private let currentCityID = WeatherViewController.userDefaults.string(forKey: "CityID")
-    private var currentCityIndex = 0
     
     //instance variables
     private var weatherDataModel = WeatherDataModel()
@@ -59,15 +58,12 @@ class WeatherViewController: UIViewController {
     //MARK: - UIsetup methods
     /***************************************************************/
     fileprivate func setupDropbox() {
-        let titleView = TitleView(navigationController: navigationController!, title: cityNameDictionary[WeatherViewController.userDefaults.string(forKey: "CityID")!]!, items: cityNameArray)
+        titleView = TitleView(navigationController: navigationController!, title: "Choose city", items: cityNameArray)
         Config.ArrowButton.Text.selectedColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        Config.List.DefaultCell.Text.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        Config.ArrowButton.Text.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.topLineColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.List.DefaultCell.separatorColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.List.backgroundColor = #colorLiteral(red: 0.926155746, green: 0.9410773516, blue: 0.9455420375, alpha: 0.09754922945)
         titleView?.action = { [weak self] index in
-            self!.currentCityIndex = index
             let city = self?.cityIDArray[index]
             WeatherViewController.userDefaults.set(city, forKey: "CityID")
             self?.setCity(city!)
@@ -116,27 +112,27 @@ class WeatherViewController: UIViewController {
     /***************************************************************/
     func updateWeatherData(json: JSON) {
         print(json)
-        if let forecastTempDegrees = json["list"][0]["main"]["temp"].double {
-            let city = json["city"]["name"].stringValue
-            let condition = json["list"][0]["weather"][0]["id"].intValue
-            let discription = json["list"][0]["weather"][0]["description"].stringValue
-            weatherDataModel.forecastTempDegrees = forecastTempDegrees
-            updateTemperatureValues()
-            weatherDataModel.city = city
-            weatherDataModel.currentWeatherDiscription = discription.capitalizingFirstLetter()
-            weatherDataModel.condition = condition
-            weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
-            updateUIWithWeatherData()
-            print(condition)
-            print(discription)
-        } else {
-            print("Error loading data")
+        guard let openWeatherTemp = json["list"][0]["main"]["temp"].double,
+            let city = json["city"]["name"].string,
+            let condition = json["list"][0]["weather"][0]["id"].int,
+            let discription = json["list"][0]["weather"][0]["description"].string else {
+                print("error parsing json")
+                return
         }
+        weatherDataModel.forecastTempDegrees = openWeatherTemp
+        weatherDataModel.city = city
+        weatherDataModel.currentWeatherDiscription = discription.capitalizingFirstLetter()
+        weatherDataModel.condition = condition
+        weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
+        updateUIWithWeatherData()
+        print(condition)
     }
     
     
     //MARK: - user interaction methods
+    /***************************************************************/
     
+    //this method used to hide settings view on tap outside
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
         if touch?.view != settingsContainerView {
@@ -152,7 +148,7 @@ class WeatherViewController: UIViewController {
         }
     }
     
-    @IBAction func temperatureValueSliderAction(_ sender: UISwitch) {
+    @IBAction func temperatureValueSwitchrAction(_ sender: UISwitch) {
         if temperatureValueSettingsSwitch.isOn {
             WeatherViewController.userDefaults.set("f", forKey: "temperatureValue")
         } else if temperatureValueSettingsSwitch.isOn == false {
@@ -163,16 +159,13 @@ class WeatherViewController: UIViewController {
     
     //MARK: - UI Updates
     /***************************************************************/
-    func updateTemperatureValues() {
+
+    func updateUIWithWeatherData() {
         let forecastTemperature = Temperature(openWeatherMapDegrees: weatherDataModel.forecastTempDegrees)
         weatherDataModel.temperature = forecastTemperature.degrees
-    }
-    
-    func updateUIWithWeatherData() {
         currentWeatherLabel.text = weatherDataModel.temperature
         weatherDiscriptionLabel.text = weatherDataModel.currentWeatherDiscription
-        updateTemperatureValues()
-        
+        titleView?.button.label.text = weatherDataModel.city
     }
 
 

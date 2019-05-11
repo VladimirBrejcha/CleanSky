@@ -13,9 +13,9 @@ struct Temperature {
     
     init(openWeatherMapDegrees: Double) {
         if WeatherViewController.userDefaults.string(forKey: "temperatureValue") == "f" {
-            degrees = String(TemperatureConverter.kelvinToFahrenheit(openWeatherMapDegrees)) + "°"
+            degrees = String(Int(TemperatureConverter.kelvinToFahrenheit(openWeatherMapDegrees))) + "°"
         } else {
-            degrees = String(TemperatureConverter.kelvinToCelsius(openWeatherMapDegrees)) + "°"
+            degrees = String(Int(TemperatureConverter.kelvinToCelsius(openWeatherMapDegrees))) + "°"
         }
     }
 }

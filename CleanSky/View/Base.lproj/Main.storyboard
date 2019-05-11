@@ -78,7 +78,7 @@
                                         <color key="onTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="thumbTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
-                                            <action selector="temperatureValueSliderAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="Ijv-fB-gyM"/>
+                                            <action selector="temperatureValueSwitchrAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="om0-7B-6b3"/>
                                         </connections>
                                     </switch>
                                 </subviews>
