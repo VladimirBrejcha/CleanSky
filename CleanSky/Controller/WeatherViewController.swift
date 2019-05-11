@@ -166,7 +166,6 @@ class WeatherViewController: UIViewController {
     /***************************************************************/
     func updateUIWithWeatherData() {
         currentWeatherLabel.text = weatherDataModel.temperature
-//        currentWeatherImageView.image = UIImage(named: weatherDataModel.weatherIconName!)
     }
 
 

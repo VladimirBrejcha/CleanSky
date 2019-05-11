@@ -13,51 +13,40 @@ class WeatherDataModel {
     //model variables
     var temperature = ""
     var condition = 0
-    var city: String?
-//    var weatherIconName: String?
+    var time = ""
+    var city = ""
     
     //This method turns a condition code into the name of the weather condition image
-    
-    func updateWeatherIcon(condition: Int) -> String {
+    func updateWeatherIcon(condition: Int) -> UIImage {
         
         switch (condition) {
             
         case 0...300 :
-            return "storm"
-            
+            return #imageLiteral(resourceName: "storm")
         case 301...500 :
-            return "lightRain"
-            
+            return #imageLiteral(resourceName: "shower")
         case 501...600 :
-            return "shower"
-            
+            return #imageLiteral(resourceName: "lightRain")
         case 601...700 :
-            return "snow"
-            
+            return #imageLiteral(resourceName: "snow")
         case 701...771 :
-            return "fog"
-            
+            return #imageLiteral(resourceName: "fog")
         case 772...799 :
-            return "storm2"
-            
+            return #imageLiteral(resourceName: "storm2")
         case 800 :
-            return "sunny"
-            
+            return #imageLiteral(resourceName: "sunny")
         case 801...804 :
-            return "cloudy"
-            
+            return #imageLiteral(resourceName: "cloudy")
         case 900...903, 905...1000  :
-            return "storm2"
-            
+            return #imageLiteral(resourceName: "storm2")
         case 903 :
-            return "snow2"
-            
+            return #imageLiteral(resourceName: "snow2")
         case 904 :
-            return "sunny"
+            return #imageLiteral(resourceName: "sunny")
             
         default :
-            return "questionMark"
+            return #imageLiteral(resourceName: "questionMark")
         }
-        
     }
+
 }
