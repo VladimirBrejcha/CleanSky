@@ -20,10 +20,9 @@ class WeatherViewController: UIViewController {
     fileprivate let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
     fileprivate let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
     
-    private let cityNameDictionary = ["524901" : "Moscow", "2643743" : "London", "5128581" : "New York"]
     private let cityNameArray = ["Moscow", "London", "New York"]
     private let cityIDArray = ["524901", "2643743", "5128581"]
-    private let cityImageArray = ["524901" : #imageLiteral(resourceName: "Moscow"), "2643743" : #imageLiteral(resourceName: "London"), "5128581" : #imageLiteral(resourceName: "New York")]
+    private let cityImageDictionary = ["524901" : #imageLiteral(resourceName: "Moscow"), "2643743" : #imageLiteral(resourceName: "London"), "5128581" : #imageLiteral(resourceName: "New York")]
     private var titleView: TitleView!
     let activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 20, y: 30, width: 20, height: 20), type: .ballClipRotate)
     
@@ -179,7 +178,7 @@ class WeatherViewController: UIViewController {
         updateUIWithtemperature()
         weatherDiscriptionLabel.text = weatherDataModel.currentWeatherDiscription
         titleView?.button.label.text = weatherDataModel.city
-        backgroundImageView.image = cityImageArray[WeatherViewController.userDefaults.string(forKey: "CityID")!]
+        backgroundImageView.image = cityImageDictionary[WeatherViewController.userDefaults.string(forKey: "CityID")!]
         activityIndicatorView.stopAnimating()
     }
 
