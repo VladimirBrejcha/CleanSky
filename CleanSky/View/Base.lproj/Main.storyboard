@@ -28,16 +28,38 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y5A-52-zCa">
-                                <rect key="frame" x="0.0" y="477" width="375" height="140"/>
+                                <rect key="frame" x="0.0" y="380" width="375" height="255"/>
                                 <subviews>
                                     <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="czw-rh-KbQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="140"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="255"/>
+                                        <subviews>
+                                            <tableView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="49" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="r2L-h2-usc">
+                                                <rect key="frame" x="5" y="5" width="365" height="245"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <prototypes>
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="forecastCell" id="046-wh-Xsy">
+                                                        <rect key="frame" x="0.0" y="28" width="365" height="49"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="046-wh-Xsy" id="Dgw-ba-Q4m">
+                                                            <rect key="frame" x="0.0" y="0.0" width="365" height="49"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </tableViewCellContentView>
+                                                    </tableViewCell>
+                                                </prototypes>
+                                            </tableView>
+                                        </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="r2L-h2-usc" secondAttribute="bottom" constant="5" id="2u2-rt-Ikv"/>
+                                            <constraint firstItem="r2L-h2-usc" firstAttribute="top" secondItem="czw-rh-KbQ" secondAttribute="top" constant="5" id="66P-17-IAi"/>
+                                            <constraint firstAttribute="trailing" secondItem="r2L-h2-usc" secondAttribute="trailing" constant="5" id="dsH-F6-D6S"/>
+                                            <constraint firstItem="r2L-h2-usc" firstAttribute="leading" secondItem="czw-rh-KbQ" secondAttribute="leading" constant="5" id="tnK-P6-q2h"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="140" id="74m-Db-d0s"/>
+                                    <constraint firstAttribute="height" constant="255" id="74m-Db-d0s"/>
                                     <constraint firstAttribute="trailing" secondItem="czw-rh-KbQ" secondAttribute="trailing" id="7a1-53-Z0P"/>
                                     <constraint firstItem="czw-rh-KbQ" firstAttribute="top" secondItem="Y5A-52-zCa" secondAttribute="top" id="8R3-YU-cgG"/>
                                     <constraint firstItem="czw-rh-KbQ" firstAttribute="leading" secondItem="Y5A-52-zCa" secondAttribute="leading" id="EfW-vp-7os"/>
@@ -104,7 +126,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="yxL-bM-NPS" secondAttribute="trailing" id="5PW-lN-xXl"/>
                             <constraint firstItem="Y5A-52-zCa" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="66F-zZ-TEH"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RBr-t7-L3T" secondAttribute="trailing" constant="10" id="6xq-A2-aXz"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Y5A-52-zCa" secondAttribute="bottom" constant="50" id="86a-bh-NO1"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Y5A-52-zCa" secondAttribute="bottom" constant="32" id="86a-bh-NO1"/>
                             <constraint firstItem="yxL-bM-NPS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="AcF-wg-lvf"/>
                             <constraint firstItem="Y5A-52-zCa" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="B5P-FT-q6z"/>
                             <constraint firstItem="RBr-t7-L3T" firstAttribute="top" secondItem="jUg-wH-e42" secondAttribute="bottom" id="ETp-dr-LQt"/>
@@ -129,6 +151,7 @@
                     <connections>
                         <outlet property="backgroundImageView" destination="yxL-bM-NPS" id="iJW-mZ-k4D"/>
                         <outlet property="currentWeatherLabel" destination="RBr-t7-L3T" id="LoL-zs-OHd"/>
+                        <outlet property="forecastTableView" destination="r2L-h2-usc" id="qXk-hN-KMT"/>
                         <outlet property="settingsContainerView" destination="yYb-Hy-o9i" id="VhF-6p-kEG"/>
                         <outlet property="temperatureValueSettingsSwitch" destination="SQg-EY-vl5" id="drv-il-4yN"/>
                         <outlet property="weatherDiscriptionLabel" destination="jUg-wH-e42" id="q61-Zs-Jqu"/>

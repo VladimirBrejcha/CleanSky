@@ -10,6 +10,7 @@ import UIKit
 import Dropdowns
 import Alamofire
 import SwiftyJSON
+import NVActivityIndicatorView
 
 class WeatherViewController: UIViewController {
     
@@ -25,6 +26,7 @@ class WeatherViewController: UIViewController {
     private let cityImageArray = ["524901" : #imageLiteral(resourceName: "Moscow"), "2643743" : #imageLiteral(resourceName: "London"), "5128581" : #imageLiteral(resourceName: "New York")]
     private var titleView: TitleView? = nil
     private let currentCityID = WeatherViewController.userDefaults.string(forKey: "CityID")
+    let activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 20, y: 30, width: 20, height: 20), type: .ballClipRotate)
     
     //instance variables
     private var weatherDataModel = WeatherDataModel()
@@ -36,6 +38,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var weatherDiscriptionLabel: UILabel!
     
+    @IBOutlet weak var forecastTableView: UITableView!
     //MARK: - Controller life cycle methods
     /***************************************************************/
     override func viewDidLoad() {
@@ -49,10 +52,16 @@ class WeatherViewController: UIViewController {
         setCity(currentCityID ?? "524901")
         setTemperatureValueSlider()
         
+        forecastTableView.dataSource = self
+        forecastTableView.register(UINib(nibName: "ForecastTableViewCell", bundle: nil), forCellReuseIdentifier: "forecastCell")
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         setupDropbox()
+        let currentWindow: UIWindow? = UIApplication.shared.keyWindow
+        currentWindow?.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
     }
     
     //MARK: - UIsetup methods
@@ -170,6 +179,20 @@ class WeatherViewController: UIViewController {
     }
 
 
+}
+
+extension WeatherViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "forecastCell", for: indexPath)
+        
+        return cell
+    }
+    
+    
 }
 
 
