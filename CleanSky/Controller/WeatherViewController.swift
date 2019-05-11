@@ -58,12 +58,13 @@ class WeatherViewController: UIViewController {
     //MARK: - UIsetup methods
     /***************************************************************/
     fileprivate func setupDropbox() {
-        titleView = TitleView(navigationController: navigationController!, title: "Choose city", items: cityNameArray)
+        titleView = TitleView(navigationController: navigationController!, title: "Choose city", items: cityNameArray, initialIndex: WeatherViewController.userDefaults.integer(forKey: "CityIndex"))
         Config.ArrowButton.Text.selectedColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.topLineColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.List.DefaultCell.separatorColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.List.backgroundColor = #colorLiteral(red: 0.926155746, green: 0.9410773516, blue: 0.9455420375, alpha: 0.09754922945)
         titleView?.action = { [weak self] index in
+            WeatherViewController.userDefaults.set(index, forKey: "CityIndex")
             let city = self?.cityIDArray[index]
             WeatherViewController.userDefaults.set(city, forKey: "CityID")
             self?.setCity(city!)
