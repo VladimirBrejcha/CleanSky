@@ -20,6 +20,7 @@ class WeatherViewController: UIViewController {
     
     private let cityNameArray = ["Moscow", "London", "New York"]
     private let cityIDArray = ["524901", "2643743", "5128581"]
+    private let cityImageArray = [#imageLiteral(resourceName: "Moscow"), #imageLiteral(resourceName: "London"), #imageLiteral(resourceName: "New York")]
     private let titleView: TitleView? = nil
     private let currentCityID = WeatherViewController.userDefaults.string(forKey: "CityID")
     
@@ -30,7 +31,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var currentWeatherLabel: UILabel!
     @IBOutlet weak var settingsContainerView: UIView!
     @IBOutlet weak var temperatureValueSettingsSwitch: UISwitch!
-    
+    @IBOutlet weak var backgroundImageView: UIImageView!
     
     //MARK: - Controller life cycle methods
     override func viewDidLoad() {
@@ -62,7 +63,7 @@ class WeatherViewController: UIViewController {
         titleView?.action = { [weak self] index in
             let city = self?.cityIDArray[index]
             self?.setCity(city!)
-            
+            self?.backgroundImageView.image = self!.cityImageArray[index]
         }
         navigationItem.titleView = titleView
     }
@@ -101,21 +102,20 @@ class WeatherViewController: UIViewController {
     func setCity(_ city: String) {
         let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
         getWeatherData(url:WEATHER_URL, parameters: locationProperties)
-        WeatherViewController.userDefaults.set(city, forKey: "City")
+        WeatherViewController.userDefaults.set(city, forKey: "CityID")
         //TODO: fix titleview at first load
 //        titleView?.button.label.text = currentCityID
     }
     
-    //MARK: - JSON Parsing
+    //MARK: - JSON Parsing && Model updating
     /***************************************************************/
     func updateWeatherData(json: JSON) {
         print(json)
         if let forecastTempDegrees = json["list"][0]["main"]["temp"].double {
             let city = json["city"]["name"].stringValue
             let condition = json["list"][0]["weather"][0]["id"].intValue
-            let forecastTemperature = Temperature(openWeatherMapDegrees: forecastTempDegrees)
-            
-            weatherDataModel.temperature = forecastTemperature.degrees
+            weatherDataModel.forecastTempDegrees = forecastTempDegrees
+            setForecastTemp()
             weatherDataModel.city = city
             weatherDataModel.condition = condition
             weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
@@ -124,20 +124,14 @@ class WeatherViewController: UIViewController {
         } else {
             print("Error loading data")
         }
-        
-        
+    }
+    
+    func setForecastTemp() {
+        let forecastTemperature = Temperature(openWeatherMapDegrees: weatherDataModel.forecastTempDegrees)
+        weatherDataModel.temperature = forecastTemperature.degrees
     }
     
     //MARK: - user interaction methods
-    func changeTemperatureValue(_ temperatureValue: Bool) {
-        if temperatureValue {
-            WeatherViewController.userDefaults.set("c", forKey: "temperatureValue")
-            currentWeatherLabel.text = weatherDataModel.temperature
-        } else {
-            WeatherViewController.userDefaults.set("f", forKey: "temperatureValue")
-            currentWeatherLabel.text = weatherDataModel.temperature
-        }
-    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
@@ -156,15 +150,17 @@ class WeatherViewController: UIViewController {
     
     @IBAction func temperatureValueSliderAction(_ sender: UISwitch) {
         if temperatureValueSettingsSwitch.isOn {
-            changeTemperatureValue(false)
+            WeatherViewController.userDefaults.set("f", forKey: "temperatureValue")
         } else if temperatureValueSettingsSwitch.isOn == false {
-            changeTemperatureValue(true)
+            WeatherViewController.userDefaults.set("c", forKey: "temperatureValue")
         }
+        updateUIWithWeatherData()
     }
     
     //MARK: - UI Updates
     /***************************************************************/
     func updateUIWithWeatherData() {
+        setForecastTemp()
         currentWeatherLabel.text = weatherDataModel.temperature
     }
 

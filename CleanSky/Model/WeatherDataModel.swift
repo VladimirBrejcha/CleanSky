@@ -13,6 +13,7 @@ class WeatherDataModel {
     //model variables
     var city = ""
     var time = ""
+    var forecastTempDegrees = 0.0
     var temperature = ""
     var condition = 0
     var weatherIcon = UIImage()
@@ -49,5 +50,5 @@ class WeatherDataModel {
             return #imageLiteral(resourceName: "questionMark")
         }
     }
-
+    
 }

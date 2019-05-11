@@ -127,6 +127,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="backgroundImageView" destination="yxL-bM-NPS" id="iJW-mZ-k4D"/>
                         <outlet property="currentWeatherLabel" destination="RBr-t7-L3T" id="LoL-zs-OHd"/>
                         <outlet property="settingsContainerView" destination="yYb-Hy-o9i" id="VhF-6p-kEG"/>
                         <outlet property="temperatureValueSettingsSwitch" destination="SQg-EY-vl5" id="drv-il-4yN"/>
