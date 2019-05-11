@@ -13,8 +13,9 @@ import SwiftyJSON
 
 class WeatherViewController: UIViewController {
     
-    //Constants
     static let userDefaults = UserDefaults.standard
+    
+    //Constants
     fileprivate let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
     fileprivate let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
     
@@ -28,7 +29,6 @@ class WeatherViewController: UIViewController {
     
     //instance variables
     private var weatherDataModel = WeatherDataModel()
-//    private var citys = [City]()
 
     //Outlets
     @IBOutlet weak var currentWeatherLabel: UILabel!
@@ -38,6 +38,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var weatherDiscriptionLabel: UILabel!
     
     //MARK: - Controller life cycle methods
+    /***************************************************************/
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -56,6 +57,7 @@ class WeatherViewController: UIViewController {
     }
     
     //MARK: - UIsetup methods
+    /***************************************************************/
     fileprivate func setupDropbox() {
         let titleView = TitleView(navigationController: navigationController!, title: cityNameDictionary[WeatherViewController.userDefaults.string(forKey: "CityID")!]!, items: cityNameArray)
         Config.ArrowButton.Text.selectedColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -108,9 +110,6 @@ class WeatherViewController: UIViewController {
         let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
         getWeatherData(url:WEATHER_URL, parameters: locationProperties)
         self.backgroundImageView.image = self.cityImageArray[WeatherViewController.userDefaults.string(forKey: "CityID")!]
-        
-        //TODO: fix titleview at first load
-//        titleView?.button.label.text = currentCityID
     }
     
     //MARK: - JSON Parsing && Model updating
@@ -122,7 +121,7 @@ class WeatherViewController: UIViewController {
             let condition = json["list"][0]["weather"][0]["id"].intValue
             let discription = json["list"][0]["weather"][0]["description"].stringValue
             weatherDataModel.forecastTempDegrees = forecastTempDegrees
-            setForecastTemp()
+            updateTemperatureValues()
             weatherDataModel.city = city
             weatherDataModel.currentWeatherDiscription = discription.capitalizingFirstLetter()
             weatherDataModel.condition = condition
@@ -135,10 +134,6 @@ class WeatherViewController: UIViewController {
         }
     }
     
-    func setForecastTemp() {
-        let forecastTemperature = Temperature(openWeatherMapDegrees: weatherDataModel.forecastTempDegrees)
-        weatherDataModel.temperature = forecastTemperature.degrees
-    }
     
     //MARK: - user interaction methods
     
@@ -168,10 +163,15 @@ class WeatherViewController: UIViewController {
     
     //MARK: - UI Updates
     /***************************************************************/
+    func updateTemperatureValues() {
+        let forecastTemperature = Temperature(openWeatherMapDegrees: weatherDataModel.forecastTempDegrees)
+        weatherDataModel.temperature = forecastTemperature.degrees
+    }
+    
     func updateUIWithWeatherData() {
-        setForecastTemp()
         currentWeatherLabel.text = weatherDataModel.temperature
         weatherDiscriptionLabel.text = weatherDataModel.currentWeatherDiscription
+        updateTemperatureValues()
         
     }
 
@@ -179,15 +179,7 @@ class WeatherViewController: UIViewController {
 }
 
 
-extension String {
-    func capitalizingFirstLetter() -> String {
-        return prefix(1).uppercased() + self.lowercased().dropFirst()
-    }
-    
-    mutating func capitalizeFirstLetter() {
-        self = self.capitalizingFirstLetter()
-    }
-}
+
 
 
 

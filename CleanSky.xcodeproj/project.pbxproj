@@ -16,7 +16,6 @@
 		926DBAE82281FC0000B58B00 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 926DBAE62281FC0000B58B00 /* Main.storyboard */; };
 		926DBAEA2281FC0200B58B00 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 926DBAE92281FC0200B58B00 /* Assets.xcassets */; };
 		926DBAED2281FC0200B58B00 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 926DBAEB2281FC0200B58B00 /* LaunchScreen.storyboard */; };
-		929D089C2286FFDC00B0C761 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929D089B2286FFDC00B0C761 /* City.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,7 +31,6 @@
 		926DBAE92281FC0200B58B00 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		926DBAEC2281FC0200B58B00 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		926DBAEE2281FC0200B58B00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		929D089B2286FFDC00B0C761 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		D36797786896F22FACC2B228 /* Pods-CleanSky.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CleanSky.debug.xcconfig"; path = "Target Support Files/Pods-CleanSky/Pods-CleanSky.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,7 +76,6 @@
 			isa = PBXGroup;
 			children = (
 				925D2CE82282087500F14C2C /* WeatherDataModel.swift */,
-				929D089B2286FFDC00B0C761 /* City.swift */,
 				922402792286D80100B9733F /* TemperatureConverter.swift */,
 				9224027B2286D84500B9733F /* Temperature.swift */,
 			);
@@ -258,7 +255,6 @@
 			files = (
 				926DBAE52281FC0000B58B00 /* WeatherViewController.swift in Sources */,
 				926DBAE32281FC0000B58B00 /* AppDelegate.swift in Sources */,
-				929D089C2286FFDC00B0C761 /* City.swift in Sources */,
 				925D2CE92282087500F14C2C /* WeatherDataModel.swift in Sources */,
 				9224027C2286D84500B9733F /* Temperature.swift in Sources */,
 				9224027A2286D80100B9733F /* TemperatureConverter.swift in Sources */,
