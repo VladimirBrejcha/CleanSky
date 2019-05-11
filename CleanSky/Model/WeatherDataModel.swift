@@ -13,6 +13,7 @@ class WeatherDataModel {
     //model variables
     var city = ""
     var time = ""
+    var currentWeatherDiscription = ""
     var forecastTempDegrees = 0.0
     var temperature = ""
     var condition = 0

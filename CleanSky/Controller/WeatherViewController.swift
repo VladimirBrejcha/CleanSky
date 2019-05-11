@@ -18,20 +18,24 @@ class WeatherViewController: UIViewController {
     fileprivate let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
     fileprivate let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
     
+    private let cityNameDictionary = ["524901" : "Moscow", "2643743" : "London", "5128581" : "New York"]
     private let cityNameArray = ["Moscow", "London", "New York"]
     private let cityIDArray = ["524901", "2643743", "5128581"]
-    private let cityImageArray = [#imageLiteral(resourceName: "Moscow"), #imageLiteral(resourceName: "London"), #imageLiteral(resourceName: "New York")]
+    private let cityImageArray = ["524901" : #imageLiteral(resourceName: "Moscow"), "2643743" : #imageLiteral(resourceName: "London"), "5128581" : #imageLiteral(resourceName: "New York")]
     private let titleView: TitleView? = nil
     private let currentCityID = WeatherViewController.userDefaults.string(forKey: "CityID")
+    private var currentCityIndex = 0
     
     //instance variables
     private var weatherDataModel = WeatherDataModel()
+//    private var citys = [City]()
 
     //Outlets
     @IBOutlet weak var currentWeatherLabel: UILabel!
     @IBOutlet weak var settingsContainerView: UIView!
     @IBOutlet weak var temperatureValueSettingsSwitch: UISwitch!
     @IBOutlet weak var backgroundImageView: UIImageView!
+    @IBOutlet weak var weatherDiscriptionLabel: UILabel!
     
     //MARK: - Controller life cycle methods
     override func viewDidLoad() {
@@ -53,7 +57,7 @@ class WeatherViewController: UIViewController {
     
     //MARK: - UIsetup methods
     fileprivate func setupDropbox() {
-        let titleView = TitleView(navigationController: navigationController!, title: "City", items: cityNameArray)
+        let titleView = TitleView(navigationController: navigationController!, title: cityNameDictionary[WeatherViewController.userDefaults.string(forKey: "CityID")!]!, items: cityNameArray)
         Config.ArrowButton.Text.selectedColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.List.DefaultCell.Text.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.ArrowButton.Text.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -61,9 +65,11 @@ class WeatherViewController: UIViewController {
         Config.List.DefaultCell.separatorColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.List.backgroundColor = #colorLiteral(red: 0.926155746, green: 0.9410773516, blue: 0.9455420375, alpha: 0.09754922945)
         titleView?.action = { [weak self] index in
+            self!.currentCityIndex = index
             let city = self?.cityIDArray[index]
+            WeatherViewController.userDefaults.set(city, forKey: "CityID")
             self?.setCity(city!)
-            self?.backgroundImageView.image = self!.cityImageArray[index]
+            self?.backgroundImageView.image = self!.cityImageArray[WeatherViewController.userDefaults.string(forKey: "CityID")!]
         }
         navigationItem.titleView = titleView
     }
@@ -95,14 +101,14 @@ class WeatherViewController: UIViewController {
                     print("some error")
                 }
             }
-            
         }
     }
     
     func setCity(_ city: String) {
         let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
         getWeatherData(url:WEATHER_URL, parameters: locationProperties)
-        WeatherViewController.userDefaults.set(city, forKey: "CityID")
+        self.backgroundImageView.image = self.cityImageArray[WeatherViewController.userDefaults.string(forKey: "CityID")!]
+        
         //TODO: fix titleview at first load
 //        titleView?.button.label.text = currentCityID
     }
@@ -114,13 +120,16 @@ class WeatherViewController: UIViewController {
         if let forecastTempDegrees = json["list"][0]["main"]["temp"].double {
             let city = json["city"]["name"].stringValue
             let condition = json["list"][0]["weather"][0]["id"].intValue
+            let discription = json["list"][0]["weather"][0]["description"].stringValue
             weatherDataModel.forecastTempDegrees = forecastTempDegrees
             setForecastTemp()
             weatherDataModel.city = city
+            weatherDataModel.currentWeatherDiscription = discription.capitalizingFirstLetter()
             weatherDataModel.condition = condition
             weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
             updateUIWithWeatherData()
             print(condition)
+            print(discription)
         } else {
             print("Error loading data")
         }
@@ -162,9 +171,25 @@ class WeatherViewController: UIViewController {
     func updateUIWithWeatherData() {
         setForecastTemp()
         currentWeatherLabel.text = weatherDataModel.temperature
+        weatherDiscriptionLabel.text = weatherDataModel.currentWeatherDiscription
+        
     }
 
 
 }
+
+
+extension String {
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).uppercased() + self.lowercased().dropFirst()
+    }
+    
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
+    }
+}
+
+
+
 
 
