@@ -15,7 +15,7 @@ class WeatherViewController: UIViewController {
     
     //Constants
     static let userDefaults = UserDefaults.standard
-    private let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
+    fileprivate let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
     private let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
     
     private let cityNameArray = ["Moscow", "London", "New York"]
@@ -110,11 +110,12 @@ class WeatherViewController: UIViewController {
     /***************************************************************/
     func updateWeatherData(json: JSON) {
         print(json)
-        if let temperature = json["list"][0]["main"]["temp"].double {
+        if let forecastTempDegrees = json["list"][0]["main"]["temp"].double {
             let city = json["city"]["name"].stringValue
             let condition = json["list"][0]["weather"][0]["id"].intValue
+            let forecastTemperature = Temperature(openWeatherMapDegrees: forecastTempDegrees)
             
-            weatherDataModel.temperature = Int(temperature - 273.15)
+            weatherDataModel.temperature = forecastTemperature.degrees
             weatherDataModel.city = city
             weatherDataModel.condition = condition
 //            weatherDataModel.weatherIconName = weatherDataModel.updateWeatherIcon(condition: condition)
@@ -131,10 +132,10 @@ class WeatherViewController: UIViewController {
     func changeTemperatureValue(_ temperatureValue: Bool) {
         if temperatureValue {
             WeatherViewController.userDefaults.set("c", forKey: "temperatureValue")
-            currentWeatherLabel.text = "\(weatherDataModel.returningTemperature)" + "°"
+            currentWeatherLabel.text = weatherDataModel.temperature
         } else {
             WeatherViewController.userDefaults.set("f", forKey: "temperatureValue")
-            currentWeatherLabel.text = "\(weatherDataModel.returningTemperature)" + "°"
+            currentWeatherLabel.text = weatherDataModel.temperature
         }
     }
     
@@ -164,7 +165,7 @@ class WeatherViewController: UIViewController {
     //MARK: - UI Updates
     /***************************************************************/
     func updateUIWithWeatherData() {
-        currentWeatherLabel.text = "\(weatherDataModel.returningTemperature)" + "°"
+        currentWeatherLabel.text = weatherDataModel.temperature
 //        currentWeatherImageView.image = UIImage(named: weatherDataModel.weatherIconName!)
     }
 

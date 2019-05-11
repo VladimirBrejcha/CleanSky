@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		62D90E09A8C4E5A0ACAF7EB1 /* Pods_CleanSky.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B9570038F85400DA3DCAEBC /* Pods_CleanSky.framework */; };
+		9224027A2286D80100B9733F /* TemperatureConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922402792286D80100B9733F /* TemperatureConverter.swift */; };
+		9224027C2286D84500B9733F /* Temperature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9224027B2286D84500B9733F /* Temperature.swift */; };
 		925D2CE92282087500F14C2C /* WeatherDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925D2CE82282087500F14C2C /* WeatherDataModel.swift */; };
 		926DBAE32281FC0000B58B00 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926DBAE22281FC0000B58B00 /* AppDelegate.swift */; };
 		926DBAE52281FC0000B58B00 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926DBAE42281FC0000B58B00 /* WeatherViewController.swift */; };
@@ -19,6 +21,8 @@
 /* Begin PBXFileReference section */
 		1B9570038F85400DA3DCAEBC /* Pods_CleanSky.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CleanSky.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		614D510A3BA4B233C8150B42 /* Pods-CleanSky.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CleanSky.release.xcconfig"; path = "Target Support Files/Pods-CleanSky/Pods-CleanSky.release.xcconfig"; sourceTree = "<group>"; };
+		922402792286D80100B9733F /* TemperatureConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureConverter.swift; sourceTree = "<group>"; };
+		9224027B2286D84500B9733F /* Temperature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temperature.swift; sourceTree = "<group>"; };
 		925D2CE82282087500F14C2C /* WeatherDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataModel.swift; sourceTree = "<group>"; };
 		926DBADF2281FC0000B58B00 /* CleanSky.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CleanSky.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		926DBAE22281FC0000B58B00 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +76,8 @@
 			isa = PBXGroup;
 			children = (
 				925D2CE82282087500F14C2C /* WeatherDataModel.swift */,
+				922402792286D80100B9733F /* TemperatureConverter.swift */,
+				9224027B2286D84500B9733F /* Temperature.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -250,6 +256,8 @@
 				926DBAE52281FC0000B58B00 /* WeatherViewController.swift in Sources */,
 				926DBAE32281FC0000B58B00 /* AppDelegate.swift in Sources */,
 				925D2CE92282087500F14C2C /* WeatherDataModel.swift in Sources */,
+				9224027C2286D84500B9733F /* Temperature.swift in Sources */,
+				9224027A2286D80100B9733F /* TemperatureConverter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
