@@ -11,10 +11,11 @@ import UIKit
 class WeatherDataModel {
     
     //model variables
+    var city = ""
+    var time = ""
     var temperature = ""
     var condition = 0
-    var time = ""
-    var city = ""
+    var weatherIcon = UIImage()
     
     //This method turns a condition code into the name of the weather condition image
     func updateWeatherIcon(condition: Int) -> UIImage {

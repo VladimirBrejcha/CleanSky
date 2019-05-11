@@ -16,7 +16,7 @@ class WeatherViewController: UIViewController {
     //Constants
     static let userDefaults = UserDefaults.standard
     fileprivate let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
-    private let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
+    fileprivate let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
     
     private let cityNameArray = ["Moscow", "London", "New York"]
     private let cityIDArray = ["524901", "2643743", "5128581"]
@@ -118,7 +118,7 @@ class WeatherViewController: UIViewController {
             weatherDataModel.temperature = forecastTemperature.degrees
             weatherDataModel.city = city
             weatherDataModel.condition = condition
-//            weatherDataModel.weatherIconName = weatherDataModel.updateWeatherIcon(condition: condition)
+            weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
             updateUIWithWeatherData()
             print(condition)
         } else {
