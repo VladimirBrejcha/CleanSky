@@ -24,8 +24,7 @@ class WeatherViewController: UIViewController {
     private let cityNameArray = ["Moscow", "London", "New York"]
     private let cityIDArray = ["524901", "2643743", "5128581"]
     private let cityImageArray = ["524901" : #imageLiteral(resourceName: "Moscow"), "2643743" : #imageLiteral(resourceName: "London"), "5128581" : #imageLiteral(resourceName: "New York")]
-    private var titleView: TitleView? = nil
-    private let currentCityID = WeatherViewController.userDefaults.string(forKey: "CityID")
+    private var titleView: TitleView!
     let activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 20, y: 30, width: 20, height: 20), type: .ballClipRotate)
     
     //instance variables
@@ -37,8 +36,9 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var temperatureValueSettingsSwitch: UISwitch!
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var weatherDiscriptionLabel: UILabel!
-    
     @IBOutlet weak var forecastTableView: UITableView!
+    
+    
     //MARK: - Controller life cycle methods
     /***************************************************************/
     override func viewDidLoad() {
@@ -49,36 +49,30 @@ class WeatherViewController: UIViewController {
         navigationController?.view.backgroundColor = .clear
         settingsContainerView.layer.cornerRadius = 20
         setupDropbox()
-        setCity(currentCityID ?? "524901")
+        setCity()
         setTemperatureValueSlider()
-        
-        forecastTableView.dataSource = self
-        forecastTableView.register(UINib(nibName: "ForecastTableViewCell", bundle: nil), forCellReuseIdentifier: "forecastCell")
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        setupDropbox()
         let currentWindow: UIWindow? = UIApplication.shared.keyWindow
         currentWindow?.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
+        forecastTableView.dataSource = self
+        forecastTableView.register(UINib(nibName: "ForecastTableViewCell", bundle: nil), forCellReuseIdentifier: "forecastCell")
+        
     }
     
     //MARK: - UIsetup methods
     /***************************************************************/
     fileprivate func setupDropbox() {
         titleView = TitleView(navigationController: navigationController!, title: "Choose city", items: cityNameArray, initialIndex: WeatherViewController.userDefaults.integer(forKey: "CityIndex"))
+        titleView?.action = { [weak self] index in
+            let city = self?.cityIDArray[index]
+            WeatherViewController.userDefaults.set(index, forKey: "CityIndex")
+            WeatherViewController.userDefaults.set(city, forKey: "CityID")
+            self?.setCity()
+        }
         Config.ArrowButton.Text.selectedColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.topLineColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.List.DefaultCell.separatorColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.List.backgroundColor = #colorLiteral(red: 0.926155746, green: 0.9410773516, blue: 0.9455420375, alpha: 0.09754922945)
-        titleView?.action = { [weak self] index in
-            WeatherViewController.userDefaults.set(index, forKey: "CityIndex")
-            let city = self?.cityIDArray[index]
-            WeatherViewController.userDefaults.set(city, forKey: "CityID")
-            self?.setCity(city!)
-            self?.backgroundImageView.image = self!.cityImageArray[WeatherViewController.userDefaults.string(forKey: "CityID")!]
-        }
         navigationItem.titleView = titleView
     }
     
@@ -92,6 +86,18 @@ class WeatherViewController: UIViewController {
     
     //MARK: - Networking
     /***************************************************************/
+    
+    func setCity() {
+        if let city = WeatherViewController.userDefaults.string(forKey: "CityID") {
+            let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
+            getWeatherData(url:WEATHER_URL, parameters: locationProperties)
+        } else {
+            let locationProperties: [String : String] = ["id" : cityIDArray[0], "appid" : APP_ID]
+            getWeatherData(url:WEATHER_URL, parameters: locationProperties)
+        }
+        
+    }
+    
     func getWeatherData(url: String, parameters: [String : String]) {
         Alamofire.request(url, method: .get, parameters: parameters).responseJSON {
             response in
@@ -112,12 +118,6 @@ class WeatherViewController: UIViewController {
         }
     }
     
-    func setCity(_ city: String) {
-        let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
-        getWeatherData(url:WEATHER_URL, parameters: locationProperties)
-        self.backgroundImageView.image = self.cityImageArray[WeatherViewController.userDefaults.string(forKey: "CityID")!]
-    }
-    
     //MARK: - JSON Parsing && Model updating
     /***************************************************************/
     func updateWeatherData(json: JSON) {
@@ -135,7 +135,6 @@ class WeatherViewController: UIViewController {
         weatherDataModel.condition = condition
         weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
         updateUIWithWeatherData()
-        print(condition)
     }
     
     
@@ -164,22 +163,29 @@ class WeatherViewController: UIViewController {
         } else if temperatureValueSettingsSwitch.isOn == false {
             WeatherViewController.userDefaults.set("c", forKey: "temperatureValue")
         }
-        updateUIWithWeatherData()
+        updateUIWithtemperature()
     }
     
     //MARK: - UI Updates
     /***************************************************************/
-
-    func updateUIWithWeatherData() {
+    
+    func updateUIWithtemperature() {
         let forecastTemperature = Temperature(openWeatherMapDegrees: weatherDataModel.forecastTempDegrees)
         weatherDataModel.temperature = forecastTemperature.degrees
         currentWeatherLabel.text = weatherDataModel.temperature
-        weatherDiscriptionLabel.text = weatherDataModel.currentWeatherDiscription
-        titleView?.button.label.text = weatherDataModel.city
     }
 
+    func updateUIWithWeatherData() {
+        updateUIWithtemperature()
+        weatherDiscriptionLabel.text = weatherDataModel.currentWeatherDiscription
+        titleView?.button.label.text = weatherDataModel.city
+        backgroundImageView.image = cityImageArray[WeatherViewController.userDefaults.string(forKey: "CityID")!]
+        activityIndicatorView.stopAnimating()
+    }
 
 }
+
+
 
 extension WeatherViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
