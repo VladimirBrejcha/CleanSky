@@ -18,6 +18,7 @@ class WeatherDataModel {
     var temperature = ""
     var condition = 0
     var weatherIcon = UIImage()
+//    var forecast = [Forecast]()
     
     //This method turns a condition code into the name of the weather condition image
     func updateWeatherIcon(condition: Int) -> UIImage {
