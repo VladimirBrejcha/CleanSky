@@ -124,15 +124,24 @@ class WeatherViewController: UIViewController {
         guard let openWeatherTemp = json["list"][0]["main"]["temp"].double,
             let city = json["city"]["name"].string,
             let condition = json["list"][0]["weather"][0]["id"].int,
-            let discription = json["list"][0]["weather"][0]["description"].string else {
+            let discription = json["list"][0]["weather"][0]["description"].string,
+            let firstDayName = json["list"][0]["dt"].double
+            else {
                 print("error parsing json")
                 return
         }
+        let forecastTimeString = ForecastDateTime(date: firstDayName, timeZone: TimeZone.current).shortTime
+        let forecastIcon = "2"
+        let forecastTemperature = "3"
+        let forecast = Forecast(day: forecastTimeString, temperature: forecastTemperature, imageName: forecastIcon)
+        weatherDataModel.forecasts.append(forecast)
+        print(weatherDataModel.forecasts[0])
         weatherDataModel.forecastTempDegrees = openWeatherTemp
         weatherDataModel.city = city
         weatherDataModel.currentWeatherDiscription = discription.capitalizingFirstLetter()
         weatherDataModel.condition = condition
         weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
+        print(forecastTimeString)
         updateUIWithWeatherData()
     }
     
@@ -180,6 +189,7 @@ class WeatherViewController: UIViewController {
         titleView?.button.label.text = weatherDataModel.city
         backgroundImageView.image = cityImageDictionary[WeatherViewController.userDefaults.string(forKey: "CityID") ?? "524901"]
         activityIndicatorView.stopAnimating()
+        forecastTableView.reloadData()
     }
 
 }
@@ -192,8 +202,14 @@ extension WeatherViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "forecastCell", for: indexPath)
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "forecastCell", for: indexPath) as! ForecastTableViewCell
+        print("works")
+        if weatherDataModel.forecasts.isEmpty == false  {
+            print("works2")
+            cell.dayLabel.text = weatherDataModel.forecasts[0].day
+            cell.temperatureLabel.text = weatherDataModel.forecasts[0].temperature
+            cell.weatherImageView.image = UIImage(named: weatherDataModel.forecasts[0].imageName)
+        }
         return cell
     }
     
