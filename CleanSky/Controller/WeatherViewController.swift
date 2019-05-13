@@ -178,7 +178,7 @@ class WeatherViewController: UIViewController {
         updateUIWithtemperature()
         weatherDiscriptionLabel.text = weatherDataModel.currentWeatherDiscription
         titleView?.button.label.text = weatherDataModel.city
-        backgroundImageView.image = cityImageDictionary[WeatherViewController.userDefaults.string(forKey: "CityID")!]
+        backgroundImageView.image = cityImageDictionary[WeatherViewController.userDefaults.string(forKey: "CityID") ?? "524901"]
         activityIndicatorView.stopAnimating()
     }
 
