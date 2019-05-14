@@ -24,7 +24,10 @@ class WeatherViewController: UIViewController {
     private let cityIDArray = ["524901", "2643743", "5128581"]
     private let cityImageDictionary = ["524901" : #imageLiteral(resourceName: "Moscow"), "2643743" : #imageLiteral(resourceName: "London"), "5128581" : #imageLiteral(resourceName: "New York")]
     private var titleView: TitleView!
-    let activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 20, y: 30, width: 20, height: 20), type: .ballClipRotate)
+    let activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 20,
+                                                                      y: 30,
+                                                                      width: 20,
+                                                                      height: 20), type: .ballClipRotate)
     
     //instance variables
     private var weatherDataModel = WeatherDataModel()
@@ -37,7 +40,6 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var weatherDiscriptionLabel: UILabel!
     @IBOutlet weak var forecastTableView: UITableView!
     @IBOutlet weak var currentWeatherIcon: UIImageView!
-    
     
     //MARK: Controller life cycle methods
     /***************************************************************/
@@ -55,14 +57,18 @@ class WeatherViewController: UIViewController {
         currentWindow?.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
         forecastTableView.dataSource = self
-        forecastTableView.register(UINib(nibName: "ForecastTableViewCell", bundle: nil), forCellReuseIdentifier: "forecastCell")
+        forecastTableView.register(UINib(nibName: "ForecastTableViewCell", bundle: nil),
+                                   forCellReuseIdentifier: "forecastCell")
         
     }
     
     //MARK: UIsetup methods
     /***************************************************************/
     fileprivate func setupDropbox() {
-        titleView = TitleView(navigationController: navigationController!, title: "Choose city", items: cityNameArray, initialIndex: WeatherViewController.userDefaults.integer(forKey: "CityIndex"))
+        titleView = TitleView(navigationController: navigationController!,
+                              title: "Choose city",
+                              items: cityNameArray,
+                              initialIndex: WeatherViewController.userDefaults.integer(forKey: "CityIndex"))
         titleView?.action = { [weak self] index in
             let city = self?.cityIDArray[index]
             WeatherViewController.userDefaults.set(index, forKey: "CityIndex")
@@ -99,8 +105,8 @@ class WeatherViewController: UIViewController {
     }
     
     func getWeatherData(url: String, parameters: [String : String]) {
-        Alamofire.request(url, method: .get, parameters: parameters).responseJSON {
-            response in
+        Alamofire.request(url, method: .get, parameters: parameters).responseJSON { response in
+            
             if response.result.isSuccess {
                 print("Success")
                 
@@ -151,7 +157,6 @@ class WeatherViewController: UIViewController {
         print(weatherDataModel.forecasts.count)
         
     }
-    
     
     //MARK: user interaction methods
     /***************************************************************/
@@ -213,7 +218,8 @@ extension WeatherViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "forecastCell", for: indexPath) as! ForecastTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "forecastCell",
+                                                 for: indexPath) as! ForecastTableViewCell
         if weatherDataModel.forecasts.isEmpty == false  {
             cell.dayLabel.text = weatherDataModel.forecasts[indexPath.row].day
             cell.temperatureLabel.text = String(weatherDataModel.forecasts[indexPath.row].temperature)
