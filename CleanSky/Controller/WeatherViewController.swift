@@ -188,12 +188,9 @@ class WeatherViewController: UIViewController {
         let currentTemperature = Temperature(openWeatherMapDegrees: weatherDataModel.forecastTempDegrees)
         weatherDataModel.temperature = currentTemperature.degrees
         currentWeatherLabel.text = weatherDataModel.temperature
-        if weatherDataModel.forecasts.isEmpty != true {
-            for index in 0...3 {
-                weatherDataModel.forecasts[index].updateTemperatureValues()
-            }
+        for index in 0...3 {
+            weatherDataModel.forecasts[index].updateTemperatureValues()
         }
-        
         forecastTableView.reloadData()
     }
 
