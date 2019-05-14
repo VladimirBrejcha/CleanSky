@@ -47,7 +47,6 @@ class WeatherDataModel {
             return #imageLiteral(resourceName: "snow2")
         case 904 :
             return #imageLiteral(resourceName: "sunny")
-            
         default :
             return #imageLiteral(resourceName: "questionMark")
         }

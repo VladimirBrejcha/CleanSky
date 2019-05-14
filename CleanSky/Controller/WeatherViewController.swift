@@ -14,8 +14,6 @@ import NVActivityIndicatorView
 
 class WeatherViewController: UIViewController {
     
-    static let userDefaults = UserDefaults.standard
-    
     //Constants
     fileprivate let weatherURL = "http://api.openweathermap.org/data/2.5/forecast"
     fileprivate let appID = "ac6a88be51624ad2b2799855bdf878d4"
@@ -57,8 +55,8 @@ class WeatherViewController: UIViewController {
         currentWindow?.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
         forecastTableView.dataSource = self
-        forecastTableView.register(UINib(nibName: "ForecastTableViewCell", bundle: nil),
-                                   forCellReuseIdentifier: "forecastCell")
+        forecastTableView.register(UINib(nibName: Constants.Cell.nibName, bundle: nil),
+                                   forCellReuseIdentifier: Constants.Cell.identifier)
         
     }
     
@@ -68,11 +66,11 @@ class WeatherViewController: UIViewController {
         titleView = TitleView(navigationController: navigationController!,
                               title: "Choose city",
                               items: cityNameArray,
-                              initialIndex: WeatherViewController.userDefaults.integer(forKey: "CityIndex"))
+                              initialIndex: Constants.userDefaults.integer(forKey: Constants.City.index))
         titleView?.action = { [weak self] index in
             let city = self?.cityIDArray[index]
-            WeatherViewController.userDefaults.set(index, forKey: "CityIndex")
-            WeatherViewController.userDefaults.set(city, forKey: "CityID")
+            Constants.userDefaults.set(index, forKey: Constants.City.index)
+            Constants.userDefaults.set(city, forKey: Constants.City.ID)
             self?.setCity()
         }
         Config.ArrowButton.Text.selectedColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -83,7 +81,7 @@ class WeatherViewController: UIViewController {
     }
     
     func setTemperatureValueSlider() {
-        if WeatherViewController.userDefaults.string(forKey: "temperatureValue") == "f" {
+        if Constants.userDefaults.string(forKey: Constants.temperatureValue) == "f" {
             temperatureValueSettingsSwitch.isOn = true
         } else {
             temperatureValueSettingsSwitch.isOn = false
@@ -94,7 +92,7 @@ class WeatherViewController: UIViewController {
     /***************************************************************/
     
     func setCity() {
-        if let city = WeatherViewController.userDefaults.string(forKey: "CityID") {
+        if let city = Constants.userDefaults.string(forKey: Constants.City.ID) {
             let locationProperties: [String : String] = ["id" : city, "appid" : appID]
             getWeatherData(url:weatherURL, parameters: locationProperties)
         } else {
@@ -108,17 +106,15 @@ class WeatherViewController: UIViewController {
         Alamofire.request(url, method: .get, parameters: parameters).responseJSON { response in
             
             if response.result.isSuccess {
-                print("Success")
-                
+                print("Get weather data request successefully gotten")
                 let weatherJSON: JSON = JSON(response.result.value!)
                 self.updateWeatherData(json: weatherJSON)
                 
             } else {
-                print("Network error")
                 if let error = response.result.error {
-                    print("error - \(error)")
+                    print("Error requesting weather data - \(error)")
                 } else {
-                    print("some error")
+                    print("Unknown error requesting weather data")
                 }
             }
         }
@@ -179,9 +175,9 @@ class WeatherViewController: UIViewController {
     
     @IBAction func temperatureValueSwitchrAction(_ sender: UISwitch) {
         if temperatureValueSettingsSwitch.isOn {
-            WeatherViewController.userDefaults.set("f", forKey: "temperatureValue")
+            Constants.userDefaults.set("f", forKey: Constants.temperatureValue)
         } else if temperatureValueSettingsSwitch.isOn == false {
-            WeatherViewController.userDefaults.set("c", forKey: "temperatureValue")
+            Constants.userDefaults.set("c", forKey: Constants.temperatureValue)
         }
         updateUIWithtemperature()
     }
@@ -204,7 +200,7 @@ class WeatherViewController: UIViewController {
         weatherDiscriptionLabel.text = weatherDataModel.currentWeatherDiscription
         titleView?.button.label.text = weatherDataModel.city
         currentWeatherIcon.image = weatherDataModel.weatherIcon
-        backgroundImageView.image = cityImageDictionary[WeatherViewController.userDefaults.string(forKey: "CityID") ?? "524901"]
+        backgroundImageView.image = cityImageDictionary[Constants.userDefaults.string(forKey: Constants.City.ID) ?? "524901"]
         activityIndicatorView.stopAnimating()
     }
 
@@ -218,7 +214,7 @@ extension WeatherViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "forecastCell",
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cell.identifier,
                                                  for: indexPath) as! ForecastTableViewCell
         if weatherDataModel.forecasts.isEmpty == false  {
             cell.dayLabel.text = weatherDataModel.forecasts[indexPath.row].day
