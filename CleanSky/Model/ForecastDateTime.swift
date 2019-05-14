@@ -20,10 +20,11 @@ struct ForecastDateTime {
     var shortTime: String {
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = timeZone
-        
         let date = Date(timeIntervalSince1970: rawDate)
-        let weekDay = Calendar.current.component(.weekday, from: date)
-        let weekDayName = dateFormatter.weekdaySymbols[weekDay]
+        dateFormatter.dateFormat = "dd-MM-yyyy"
+        dateFormatter.dateFormat = "EEEE"
+        let currentDateString: String = dateFormatter.string(from: date)
+        let weekDayName = currentDateString
         return String(weekDayName)
     }
 }

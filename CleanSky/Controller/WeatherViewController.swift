@@ -131,6 +131,9 @@ class WeatherViewController: UIViewController {
                 print("error parsing json")
                 return
         }
+//        for index in 0...32 where (index == ){
+//
+//        }
         let forecastTimeString = ForecastDateTime(date: firstDayName, timeZone: TimeZone.current).shortTime
         let forecastIcon = "2"
         let forecastTemperature = "3"
@@ -143,6 +146,7 @@ class WeatherViewController: UIViewController {
         weatherDataModel.condition = condition
         weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
         currentWeatherIcon.image = weatherDataModel.weatherIcon
+        print(firstDayName)
         print(forecastTimeString)
         updateUIWithWeatherData()
     }
