@@ -123,30 +123,29 @@ class WeatherViewController: UIViewController {
     func updateWeatherData(json: JSON) {
         for index in 0...32 where (index == 8 || index == 16 || index == 24 || index == 32) {
             guard
-                let condition = json["list"][index]["weather"][0]["id"].int,
                 let firstDayName = json["list"][index]["dt"].double,
-                let openWeatherTemp = json["list"][index]["main"]["temp"].double
+                let openWeatherTemp = json["list"][index]["main"]["temp"].double,
+                let condition = json["list"][index]["weather"][0]["id"].int
                 else {
                     print("error parsing json")
                     break
                     
             }
             let forecastTimeString = ForecastDateTime(date: firstDayName, timeZone: TimeZone.current).shortTime
-            let forecastIcon = "2"
-            let forecast = Forecast(day: forecastTimeString, forecastTempDegrees: openWeatherTemp, imageName: forecastIcon)
+            let forecastIcon = weatherDataModel.updateWeatherIcon(condition: condition)
+            let forecast = Forecast(day: forecastTimeString, forecastTempDegrees: openWeatherTemp, image: forecastIcon)
             weatherDataModel.forecasts.append(forecast)
-            weatherDataModel.condition = condition
-            weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
-            currentWeatherIcon.image = weatherDataModel.weatherIcon
         }
         guard let city = json["city"]["name"].string,
+            let condition = json["list"][0]["weather"][0]["id"].int,
             let openWeatherTemp = json["list"][0]["main"]["temp"].double,
             let discription = json["list"][0]["weather"][0]["description"].string
             else { return }
+        weatherDataModel.condition = condition
+        weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
         weatherDataModel.city = city
         weatherDataModel.forecastTempDegrees = openWeatherTemp
         weatherDataModel.currentWeatherDiscription = discription.capitalizingFirstLetter()
-        print("city: \(city)")
         updateUIWithWeatherData()
         
     }
@@ -197,6 +196,7 @@ class WeatherViewController: UIViewController {
         updateUIWithtemperature()
         weatherDiscriptionLabel.text = weatherDataModel.currentWeatherDiscription
         titleView?.button.label.text = weatherDataModel.city
+        currentWeatherIcon.image = weatherDataModel.weatherIcon
         backgroundImageView.image = cityImageDictionary[WeatherViewController.userDefaults.string(forKey: "CityID") ?? "524901"]
         activityIndicatorView.stopAnimating()
     }
@@ -215,7 +215,7 @@ extension WeatherViewController: UITableViewDataSource {
         if weatherDataModel.forecasts.isEmpty == false  {
             cell.dayLabel.text = weatherDataModel.forecasts[indexPath.row].day
             cell.temperatureLabel.text = String(weatherDataModel.forecasts[indexPath.row].temperature)
-            cell.weatherImageView.image = UIImage(named: weatherDataModel.forecasts[indexPath.row].imageName)
+            cell.weatherImageView.image = weatherDataModel.forecasts[indexPath.row].image
         }
         return cell
     }

@@ -6,20 +6,20 @@
 //  Copyright © 2019 Vladimir Brejcha. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct Forecast {
     let day: String
     var forecastTempDegrees: Double
     var temperature: String
-    let imageName: String
+    let image: UIImage
     
-    init(day: String, forecastTempDegrees: Double, temperature: String? = nil, imageName: String) {
+    init(day: String, forecastTempDegrees: Double, temperature: String? = nil, image: UIImage) {
         self.day = day
         self.forecastTempDegrees = forecastTempDegrees
         let temperature = Temperature(openWeatherMapDegrees: forecastTempDegrees)
         self.temperature = temperature.degrees
-        self.imageName = imageName
+        self.image = image
     }
     
     mutating func updateTemperatureValues () {
