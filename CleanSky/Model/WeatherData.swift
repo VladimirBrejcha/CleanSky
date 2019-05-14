@@ -8,17 +8,17 @@
 
 import UIKit
 
-class WeatherDataModel {
+struct WeatherData {
     
     //model variables
-    var city = ""
-    var time = ""
-    var currentWeatherDiscription = ""
-    var forecastTempDegrees = 0.0
-    var temperature = ""
-    var condition = 0
-    var weatherIcon = UIImage()
-    var forecasts = [Forecast]()
+    var city: String?
+    var time: String?
+    var currentWeatherDiscription: String?
+    var forecastTempDegrees: Double?
+    var temperature: String?
+    var condition: Int?
+    var weatherIcon: UIImage?
+    var forecasts: [Forecast]?
     
     //This method turns a condition code into the name of the weather condition image
     func updateWeatherIcon(condition: Int) -> UIImage {

@@ -28,7 +28,7 @@ class WeatherViewController: UIViewController {
                                                                       height: 20), type: .ballClipRotate)
     
     //instance variables
-    private var weatherDataModel = WeatherDataModel()
+    private var weatherDataModel = WeatherData()
 
     //Outlets
     @IBOutlet weak var currentWeatherLabel: UILabel!
@@ -123,7 +123,7 @@ class WeatherViewController: UIViewController {
     //MARK: JSON Parsing && Model updating
     /***************************************************************/
     func updateWeatherData(json: JSON) {
-        weatherDataModel.forecasts.removeAll()
+        weatherDataModel.forecasts?.removeAll()
         for index in 0...32 where (index == 8 || index == 16 || index == 24 || index == 32) {
             guard
                 let firstDayName = json["list"][index]["dt"].double,
@@ -137,20 +137,19 @@ class WeatherViewController: UIViewController {
             let forecastTimeString = DateConverter(rawDate: firstDayName).weekDay
             let forecastIcon = weatherDataModel.updateWeatherIcon(condition: condition)
             let forecast = Forecast(day: forecastTimeString, forecastTempDegrees: openWeatherTemp, image: forecastIcon)
-            weatherDataModel.forecasts.append(forecast)
+            weatherDataModel.forecasts?.append(forecast)
         }
         guard let city = json["city"]["name"].string,
             let condition = json["list"][0]["weather"][0]["id"].int,
             let openWeatherTemp = json["list"][0]["main"]["temp"].double,
             let discription = json["list"][0]["weather"][0]["description"].string
             else { return }
-        weatherDataModel.condition = condition
+        weatherDataModel.condition? = condition
         weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
         weatherDataModel.city = city
         weatherDataModel.forecastTempDegrees = openWeatherTemp
         weatherDataModel.currentWeatherDiscription = discription.capitalizingFirstLetter()
         updateUIWithWeatherData()
-        print(weatherDataModel.forecasts.count)
         
     }
     
@@ -186,11 +185,11 @@ class WeatherViewController: UIViewController {
     /***************************************************************/
     
     func updateUIWithtemperature() {
-        let currentTemperature = Temperature(openWeatherMapDegrees: weatherDataModel.forecastTempDegrees)
+        let currentTemperature = Temperature(openWeatherMapDegrees: weatherDataModel.forecastTempDegrees!)
         weatherDataModel.temperature = currentTemperature.degrees
         currentWeatherLabel.text = weatherDataModel.temperature
         for index in 0...3 {
-            weatherDataModel.forecasts[index].updateTemperatureValues()
+            weatherDataModel.forecasts?[index].updateTemperatureValues()
         }
         forecastTableView.reloadData()
     }
@@ -216,10 +215,10 @@ extension WeatherViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cell.identifier,
                                                  for: indexPath) as! ForecastTableViewCell
-        if weatherDataModel.forecasts.isEmpty == false  {
-            cell.dayLabel.text = weatherDataModel.forecasts[indexPath.row].day
-            cell.temperatureLabel.text = String(weatherDataModel.forecasts[indexPath.row].temperature!)
-            cell.weatherImageView.image = weatherDataModel.forecasts[indexPath.row].image
+        if weatherDataModel.forecasts?.isEmpty == false  {
+            cell.dayLabel.text = weatherDataModel.forecasts?[indexPath.row].day
+            cell.temperatureLabel.text = String((weatherDataModel.forecasts?[indexPath.row].temperature!)!)
+            cell.weatherImageView.image = weatherDataModel.forecasts?[indexPath.row].image
         }
         return cell
     }
