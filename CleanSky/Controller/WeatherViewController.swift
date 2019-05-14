@@ -36,6 +36,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var weatherDiscriptionLabel: UILabel!
     @IBOutlet weak var forecastTableView: UITableView!
+    @IBOutlet weak var currentWeatherIcon: UIImageView!
     
     
     //MARK: - Controller life cycle methods
@@ -141,6 +142,7 @@ class WeatherViewController: UIViewController {
         weatherDataModel.currentWeatherDiscription = discription.capitalizingFirstLetter()
         weatherDataModel.condition = condition
         weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
+        currentWeatherIcon.image = weatherDataModel.weatherIcon
         print(forecastTimeString)
         updateUIWithWeatherData()
     }
@@ -198,7 +200,7 @@ class WeatherViewController: UIViewController {
 
 extension WeatherViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 4
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
