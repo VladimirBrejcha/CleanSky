@@ -12,6 +12,7 @@ struct Temperature {
     let degrees: String
     
     init(openWeatherMapDegrees: Double) {
+
         if WeatherViewController.userDefaults.string(forKey: "temperatureValue") == "f" {
             degrees = String(Int(TemperatureConverter.kelvinToFahrenheit(openWeatherMapDegrees))) + "°"
         } else {

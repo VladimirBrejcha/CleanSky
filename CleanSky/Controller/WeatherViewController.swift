@@ -17,8 +17,8 @@ class WeatherViewController: UIViewController {
     static let userDefaults = UserDefaults.standard
     
     //Constants
-    fileprivate let WEATHER_URL = "http://api.openweathermap.org/data/2.5/forecast"
-    fileprivate let APP_ID = "ac6a88be51624ad2b2799855bdf878d4"
+    fileprivate let weatherURL = "http://api.openweathermap.org/data/2.5/forecast"
+    fileprivate let appID = "ac6a88be51624ad2b2799855bdf878d4"
     
     private let cityNameArray = ["Moscow", "London", "New York"]
     private let cityIDArray = ["524901", "2643743", "5128581"]
@@ -95,11 +95,11 @@ class WeatherViewController: UIViewController {
     
     func setCity() {
         if let city = WeatherViewController.userDefaults.string(forKey: "CityID") {
-            let locationProperties: [String : String] = ["id" : city, "appid" : APP_ID]
-            getWeatherData(url:WEATHER_URL, parameters: locationProperties)
+            let locationProperties: [String : String] = ["id" : city, "appid" : appID]
+            getWeatherData(url:weatherURL, parameters: locationProperties)
         } else {
-            let locationProperties: [String : String] = ["id" : cityIDArray[0], "appid" : APP_ID]
-            getWeatherData(url:WEATHER_URL, parameters: locationProperties)
+            let locationProperties: [String : String] = ["id" : cityIDArray[0], "appid" : appID]
+            getWeatherData(url:weatherURL, parameters: locationProperties)
         }
         
     }
@@ -138,7 +138,7 @@ class WeatherViewController: UIViewController {
                     break
                     
             }
-            let forecastTimeString = ForecastDateTime(date: firstDayName, timeZone: TimeZone.current).shortTime
+            let forecastTimeString = DateConverter(rawDate: firstDayName).weekDay
             let forecastIcon = weatherDataModel.updateWeatherIcon(condition: condition)
             let forecast = Forecast(day: forecastTimeString, forecastTempDegrees: openWeatherTemp, image: forecastIcon)
             weatherDataModel.forecasts.append(forecast)
@@ -222,7 +222,7 @@ extension WeatherViewController: UITableViewDataSource {
                                                  for: indexPath) as! ForecastTableViewCell
         if weatherDataModel.forecasts.isEmpty == false  {
             cell.dayLabel.text = weatherDataModel.forecasts[indexPath.row].day
-            cell.temperatureLabel.text = String(weatherDataModel.forecasts[indexPath.row].temperature)
+            cell.temperatureLabel.text = String(weatherDataModel.forecasts[indexPath.row].temperature!)
             cell.weatherImageView.image = weatherDataModel.forecasts[indexPath.row].image
         }
         return cell
