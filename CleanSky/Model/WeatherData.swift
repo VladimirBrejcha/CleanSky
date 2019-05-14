@@ -10,21 +10,22 @@ import UIKit
 
 struct WeatherData {
     
-    //model variables
     var city: String?
-    var time: String?
-    var currentWeatherDiscription: String?
-    var forecastTempDegrees: Double?
-    var temperature: String?
-    var condition: Int?
-    var weatherIcon: UIImage?
-    var forecasts: [Forecast]?
+    var discription: String?
+    var openWeatherTemperature: Double?
+    var convertedTemperature: String?
+    var condition: Int? {
+        willSet {
+            weatherImage = updateWeatherIcon(condition: newValue!)
+        }
+    }
+    var weatherImage: UIImage?
+    var forecasts = [Forecast]()
     
-    //This method turns a condition code into the name of the weather condition image
+    //This method turns a condition code into the weather condition image
     func updateWeatherIcon(condition: Int) -> UIImage {
         
         switch (condition) {
-            
         case 0...300 :
             return #imageLiteral(resourceName: "storm")
         case 301...500 :
@@ -51,5 +52,4 @@ struct WeatherData {
             return #imageLiteral(resourceName: "questionMark")
         }
     }
-    
 }

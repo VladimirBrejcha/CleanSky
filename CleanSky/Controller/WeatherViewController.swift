@@ -14,30 +14,26 @@ import NVActivityIndicatorView
 
 class WeatherViewController: UIViewController {
     
-    //Constants
-    fileprivate let weatherURL = "http://api.openweathermap.org/data/2.5/forecast"
-    fileprivate let appID = "ac6a88be51624ad2b2799855bdf878d4"
-    
     private let cityNameArray = ["Moscow", "London", "New York"]
     private let cityIDArray = ["524901", "2643743", "5128581"]
     private let cityImageDictionary = ["524901" : #imageLiteral(resourceName: "Moscow"), "2643743" : #imageLiteral(resourceName: "London"), "5128581" : #imageLiteral(resourceName: "New York")]
+    
+    private var weatherDataModel = WeatherData()
+    
+    // UI elements
     private var titleView: TitleView!
+    
     let activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 20,
                                                                       y: 30,
                                                                       width: 20,
                                                                       height: 20), type: .ballClipRotate)
-    
-    //instance variables
-    private var weatherDataModel = WeatherData()
-
-    //Outlets
-    @IBOutlet weak var currentWeatherLabel: UILabel!
+    @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var settingsContainerView: UIView!
     @IBOutlet weak var temperatureValueSettingsSwitch: UISwitch!
-    @IBOutlet weak var backgroundImageView: UIImageView!
-    @IBOutlet weak var weatherDiscriptionLabel: UILabel!
-    @IBOutlet weak var forecastTableView: UITableView!
+    @IBOutlet weak var currentWeatherLabel: UILabel!
     @IBOutlet weak var currentWeatherIcon: UIImageView!
+    @IBOutlet weak var currentWeatherDiscriptionLabel: UILabel!
+    @IBOutlet weak var forecastTableView: UITableView!
     
     //MARK: Controller life cycle methods
     /***************************************************************/
@@ -47,17 +43,14 @@ class WeatherViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.view.backgroundColor = .clear
-        settingsContainerView.layer.cornerRadius = 20
-        setupDropbox()
-        setCity()
-        setTemperatureValueSlider()
-        let currentWindow: UIWindow? = UIApplication.shared.keyWindow
-        currentWindow?.addSubview(activityIndicatorView)
-        activityIndicatorView.startAnimating()
-        forecastTableView.dataSource = self
-        forecastTableView.register(UINib(nibName: Constants.Cell.nibName, bundle: nil),
-                                   forCellReuseIdentifier: Constants.Cell.identifier)
         
+        settingsContainerView.layer.cornerRadius = 20
+        setupTemperatureChangingSwitch()
+        setupDropbox()
+        setupActivityIndicator()
+        setupTableView()
+        
+        setCity()
     }
     
     //MARK: UIsetup methods
@@ -68,9 +61,9 @@ class WeatherViewController: UIViewController {
                               items: cityNameArray,
                               initialIndex: Constants.userDefaults.integer(forKey: Constants.City.index))
         titleView?.action = { [weak self] index in
-            let city = self?.cityIDArray[index]
+            let city = self?.cityIDArray[index] //getting id of a current city to save it
             Constants.userDefaults.set(index, forKey: Constants.City.index)
-            Constants.userDefaults.set(city, forKey: Constants.City.ID)
+            Constants.userDefaults.set(city, forKey: Constants.City.ID) //saving current city to use it on app launch
             self?.setCity()
         }
         Config.ArrowButton.Text.selectedColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -80,7 +73,7 @@ class WeatherViewController: UIViewController {
         navigationItem.titleView = titleView
     }
     
-    func setTemperatureValueSlider() {
+    fileprivate func setupTemperatureChangingSwitch() {
         if Constants.userDefaults.string(forKey: Constants.temperatureValue) == "f" {
             temperatureValueSettingsSwitch.isOn = true
         } else {
@@ -88,28 +81,36 @@ class WeatherViewController: UIViewController {
         }
     }
     
-    //MARK: Networking
-    /***************************************************************/
-    
-    func setCity() {
-        if let city = Constants.userDefaults.string(forKey: Constants.City.ID) {
-            let locationProperties: [String : String] = ["id" : city, "appid" : appID]
-            getWeatherData(url:weatherURL, parameters: locationProperties)
-        } else {
-            let locationProperties: [String : String] = ["id" : cityIDArray[0], "appid" : appID]
-            getWeatherData(url:weatherURL, parameters: locationProperties)
-        }
-        
+    fileprivate func setupActivityIndicator() {
+        let currentWindow: UIWindow? = UIApplication.shared.keyWindow
+        currentWindow?.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
     }
     
-    func getWeatherData(url: String, parameters: [String : String]) {
+    fileprivate func setupTableView() {
+        forecastTableView.dataSource = self
+        forecastTableView.register(UINib(nibName: Constants.Cell.nibName, bundle: nil),
+                                   forCellReuseIdentifier: Constants.Cell.identifier)
+    }
+    
+    //MARK: Networking
+    /***************************************************************/
+    fileprivate func setCity() {
+        if let city = Constants.userDefaults.string(forKey: Constants.City.ID) { //setting city based on city id
+            let locationProperties: [String : String] = ["id" : city, "appid" : Constants.OpenWeather.appID]
+            getWeatherData(url:Constants.OpenWeather.requestURL, parameters: locationProperties)
+        } else {
+            let locationProperties: [String : String] = ["id" : cityIDArray[0], "appid" : Constants.OpenWeather.appID] //setting city if city id doesnt exist yet
+            getWeatherData(url:Constants.OpenWeather.requestURL, parameters: locationProperties)
+        }
+    }
+    
+    fileprivate func getWeatherData(url: String, parameters: [String : String]) {
         Alamofire.request(url, method: .get, parameters: parameters).responseJSON { response in
-            
             if response.result.isSuccess {
                 print("Get weather data request successefully gotten")
                 let weatherJSON: JSON = JSON(response.result.value!)
                 self.updateWeatherData(json: weatherJSON)
-                
             } else {
                 if let error = response.result.error {
                     print("Error requesting weather data - \(error)")
@@ -123,34 +124,47 @@ class WeatherViewController: UIViewController {
     //MARK: JSON Parsing && Model updating
     /***************************************************************/
     func updateWeatherData(json: JSON) {
-        weatherDataModel.forecasts?.removeAll()
+        
+        guard
+            let city = json["city"]["name"].string,
+            let condition = json["list"][0]["weather"][0]["id"].int,
+            let openWeatherTemperature = json["list"][0]["main"]["temp"].double,
+            let discription = json["list"][0]["weather"][0]["description"].string
+            else {
+                print("Error parsing weather json")
+                return
+        }
+        
+        updateForecastData(json)
+        
+        weatherDataModel.condition = condition
+        weatherDataModel.city = city
+        weatherDataModel.openWeatherTemperature = openWeatherTemperature
+        weatherDataModel.discription = discription.capitalizingFirstLetter()
+        
+        updateUIWithWeatherData()
+    }
+    
+    fileprivate func updateForecastData(_ json: JSON) {
+        
+        weatherDataModel.forecasts.removeAll()
+        
         for index in 0...32 where (index == 8 || index == 16 || index == 24 || index == 32) {
             guard
-                let firstDayName = json["list"][index]["dt"].double,
-                let openWeatherTemp = json["list"][index]["main"]["temp"].double,
+                let date = json["list"][index]["dt"].double,
+                let openWeatherTemperature = json["list"][index]["main"]["temp"].double,
                 let condition = json["list"][index]["weather"][0]["id"].int
                 else {
-                    print("error parsing json")
+                    print("Error parsing forecast json")
                     break
-                    
             }
-            let forecastTimeString = DateConverter(rawDate: firstDayName).weekDay
-            let forecastIcon = weatherDataModel.updateWeatherIcon(condition: condition)
-            let forecast = Forecast(day: forecastTimeString, forecastTempDegrees: openWeatherTemp, image: forecastIcon)
-            weatherDataModel.forecasts?.append(forecast)
+            
+            let forecastDate = DateConverter(rawDate: date).weekDay
+            let forecastImage = weatherDataModel.updateWeatherIcon(condition: condition)
+            let forecast = Forecast(day: forecastDate, temperature: openWeatherTemperature, image: forecastImage)
+            
+            weatherDataModel.forecasts.append(forecast)
         }
-        guard let city = json["city"]["name"].string,
-            let condition = json["list"][0]["weather"][0]["id"].int,
-            let openWeatherTemp = json["list"][0]["main"]["temp"].double,
-            let discription = json["list"][0]["weather"][0]["description"].string
-            else { return }
-        weatherDataModel.condition? = condition
-        weatherDataModel.weatherIcon = weatherDataModel.updateWeatherIcon(condition: condition)
-        weatherDataModel.city = city
-        weatherDataModel.forecastTempDegrees = openWeatherTemp
-        weatherDataModel.currentWeatherDiscription = discription.capitalizingFirstLetter()
-        updateUIWithWeatherData()
-        
     }
     
     //MARK: user interaction methods
@@ -165,14 +179,11 @@ class WeatherViewController: UIViewController {
     }
     
     @IBAction func settingsButtonAction(_ sender: UIBarButtonItem) {
-        if settingsContainerView.isHidden == true {
-            settingsContainerView.isHidden = false
-        } else {
-            settingsContainerView.isHidden = true
-        }
+        settingsContainerView.isHidden = !settingsContainerView.isHidden
     }
     
-    @IBAction func temperatureValueSwitchrAction(_ sender: UISwitch) {
+    //TODO: refactor this methods
+    @IBAction func temperatureValueSwitchAction(_ sender: UISwitch) {
         if temperatureValueSettingsSwitch.isOn {
             Constants.userDefaults.set("f", forKey: Constants.temperatureValue)
         } else if temperatureValueSettingsSwitch.isOn == false {
@@ -185,20 +196,20 @@ class WeatherViewController: UIViewController {
     /***************************************************************/
     
     func updateUIWithtemperature() {
-        let currentTemperature = Temperature(openWeatherMapDegrees: weatherDataModel.forecastTempDegrees!)
-        weatherDataModel.temperature = currentTemperature.degrees
-        currentWeatherLabel.text = weatherDataModel.temperature
+        let currentTemperature = Temperature(openWeatherMapDegrees: weatherDataModel.openWeatherTemperature!)
+        weatherDataModel.convertedTemperature = currentTemperature.degrees
+        currentWeatherLabel.text = weatherDataModel.convertedTemperature
         for index in 0...3 {
-            weatherDataModel.forecasts?[index].updateTemperatureValues()
+            weatherDataModel.forecasts[index].updateTemperatureValues()
         }
         forecastTableView.reloadData()
     }
 
     func updateUIWithWeatherData() {
         updateUIWithtemperature()
-        weatherDiscriptionLabel.text = weatherDataModel.currentWeatherDiscription
+        currentWeatherDiscriptionLabel.text = weatherDataModel.discription
         titleView?.button.label.text = weatherDataModel.city
-        currentWeatherIcon.image = weatherDataModel.weatherIcon
+        currentWeatherIcon.image = weatherDataModel.weatherImage
         backgroundImageView.image = cityImageDictionary[Constants.userDefaults.string(forKey: Constants.City.ID) ?? "524901"]
         activityIndicatorView.stopAnimating()
     }
@@ -215,10 +226,10 @@ extension WeatherViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cell.identifier,
                                                  for: indexPath) as! ForecastTableViewCell
-        if weatherDataModel.forecasts?.isEmpty == false  {
-            cell.dayLabel.text = weatherDataModel.forecasts?[indexPath.row].day
-            cell.temperatureLabel.text = String((weatherDataModel.forecasts?[indexPath.row].temperature!)!)
-            cell.weatherImageView.image = weatherDataModel.forecasts?[indexPath.row].image
+        if weatherDataModel.forecasts.isEmpty == false  {
+            cell.dayLabel.text = weatherDataModel.forecasts[indexPath.row].day
+            cell.temperatureLabel.text = String((weatherDataModel.forecasts[indexPath.row].convertedTemperature!))
+            cell.weatherImageView.image = weatherDataModel.forecasts[indexPath.row].weatherImage
         }
         return cell
     }

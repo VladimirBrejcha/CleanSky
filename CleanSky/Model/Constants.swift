@@ -24,6 +24,11 @@ struct Constants {
         static let nibName = "ForecastTableViewCell"
     }
     
+    struct OpenWeather {
+        static let requestURL = "http://api.openweathermap.org/data/2.5/forecast"
+        static let appID = "ac6a88be51624ad2b2799855bdf878d4"
+    }
+    
     
     private init() { }
 }
