@@ -121,6 +121,7 @@ class WeatherViewController: UIViewController {
     //MARK: - JSON Parsing && Model updating
     /***************************************************************/
     func updateWeatherData(json: JSON) {
+        weatherDataModel.forecasts.removeAll()
         for index in 0...32 where (index == 8 || index == 16 || index == 24 || index == 32) {
             guard
                 let firstDayName = json["list"][index]["dt"].double,
@@ -147,6 +148,7 @@ class WeatherViewController: UIViewController {
         weatherDataModel.forecastTempDegrees = openWeatherTemp
         weatherDataModel.currentWeatherDiscription = discription.capitalizingFirstLetter()
         updateUIWithWeatherData()
+        print(weatherDataModel.forecasts.count)
         
     }
     
@@ -186,9 +188,12 @@ class WeatherViewController: UIViewController {
         let currentTemperature = Temperature(openWeatherMapDegrees: weatherDataModel.forecastTempDegrees)
         weatherDataModel.temperature = currentTemperature.degrees
         currentWeatherLabel.text = weatherDataModel.temperature
-        for index in 0...3 {
-            weatherDataModel.forecasts[index].updateTemperatureValues()
+        if weatherDataModel.forecasts.isEmpty != true {
+            for index in 0...3 {
+                weatherDataModel.forecasts[index].updateTemperatureValues()
+            }
         }
+        
         forecastTableView.reloadData()
     }
 
