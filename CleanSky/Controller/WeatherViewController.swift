@@ -39,7 +39,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var currentWeatherIcon: UIImageView!
     
     
-    //MARK: - Controller life cycle methods
+    //MARK: Controller life cycle methods
     /***************************************************************/
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +59,7 @@ class WeatherViewController: UIViewController {
         
     }
     
-    //MARK: - UIsetup methods
+    //MARK: UIsetup methods
     /***************************************************************/
     fileprivate func setupDropbox() {
         titleView = TitleView(navigationController: navigationController!, title: "Choose city", items: cityNameArray, initialIndex: WeatherViewController.userDefaults.integer(forKey: "CityIndex"))
@@ -84,7 +84,7 @@ class WeatherViewController: UIViewController {
         }
     }
     
-    //MARK: - Networking
+    //MARK: Networking
     /***************************************************************/
     
     func setCity() {
@@ -118,7 +118,7 @@ class WeatherViewController: UIViewController {
         }
     }
     
-    //MARK: - JSON Parsing && Model updating
+    //MARK: JSON Parsing && Model updating
     /***************************************************************/
     func updateWeatherData(json: JSON) {
         weatherDataModel.forecasts.removeAll()
@@ -153,7 +153,7 @@ class WeatherViewController: UIViewController {
     }
     
     
-    //MARK: - user interaction methods
+    //MARK: user interaction methods
     /***************************************************************/
     
     //this method used to hide settings view on tap outside
@@ -181,7 +181,7 @@ class WeatherViewController: UIViewController {
         updateUIWithtemperature()
     }
     
-    //MARK: - UI Updates
+    //MARK: UI Updates
     /***************************************************************/
     
     func updateUIWithtemperature() {
