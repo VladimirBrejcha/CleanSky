@@ -17,12 +17,6 @@ struct WeatherData {
         }
     }
     var convertedTemperature: String?
-    var condition: Int? {
-        willSet {
-            weatherImage = updateWeatherIcon(condition: newValue!)
-        }
-    }
-    var weatherImage: UIImage?
     var forecasts = [Forecast]()
     
     //This method turns a condition code into the weather condition image

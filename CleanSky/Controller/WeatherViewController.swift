@@ -19,6 +19,7 @@ class WeatherViewController: UIViewController {
     private let cityImageDictionary = ["524901" : #imageLiteral(resourceName: "Moscow"), "2643743" : #imageLiteral(resourceName: "London"), "5128581" : #imageLiteral(resourceName: "New York")]
     
     private var weatherDataModel = WeatherData()
+    let sessionManager = SessionManager()
     
     // UI elements
     private var titleView: TitleView!
@@ -32,7 +33,6 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var settingsButton: UIBarButtonItem!
     @IBOutlet weak var temperatureValueSettingsSwitch: UISwitch!
     @IBOutlet weak var currentWeatherLabel: UILabel!
-    @IBOutlet weak var currentWeatherIcon: UIImageView!
     @IBOutlet weak var currentWeatherDiscriptionLabel: UILabel!
     @IBOutlet weak var forecastTableView: UITableView!
     
@@ -50,7 +50,6 @@ class WeatherViewController: UIViewController {
         setupDropbox()
         setupActivityIndicator()
         setupTableView()
-        
         setCity()
     }
     
@@ -61,8 +60,6 @@ class WeatherViewController: UIViewController {
                               title: "Choose city",
                               items: cityNameArray,
                               initialIndex: Constants.userDefaults.integer(forKey: Constants.City.index))
-        titleView.alpha = 0.35
-        titleView.isUserInteractionEnabled = false
         titleView?.action = { [weak self] index in
             let city = self?.cityIDArray[index] //getting id of a current city to save it
             Constants.userDefaults.set(index, forKey: Constants.City.index)
@@ -86,13 +83,11 @@ class WeatherViewController: UIViewController {
     
     fileprivate func setupSettingsView() {
         settingsContainerView.layer.cornerRadius = 20
-        settingsButton.isEnabled = false
     }
     
     fileprivate func setupActivityIndicator() {
         let currentWindow: UIWindow? = UIApplication.shared.keyWindow
         currentWindow?.addSubview(activityIndicatorView)
-        activityIndicatorView.startAnimating()
     }
     
     fileprivate func setupTableView() {
@@ -104,6 +99,7 @@ class WeatherViewController: UIViewController {
     //MARK: Networking
     /***************************************************************/
     fileprivate func setCity() {
+        blockUserInteraction()
         if let city = Constants.userDefaults.string(forKey: Constants.City.ID) { //setting city based on city id
             let locationProperties: [String : String] = ["id" : city, "appid" : Constants.OpenWeather.appID]
             getWeatherData(url:Constants.OpenWeather.requestURL, parameters: locationProperties)
@@ -114,14 +110,19 @@ class WeatherViewController: UIViewController {
     }
     
     fileprivate func getWeatherData(url: String, parameters: [String : String]) {
-        
-        Alamofire.request(url, method: .get, parameters: parameters).responseJSON { response in
+        sessionManager.retrier = OAuth2Handler()
+        let request = sessionManager.request(url, method: .get, parameters: parameters).validate()
+        request.responseJSON { response in
             if response.result.isSuccess {
                 print("Get weather data request successefully gotten")
                 let weatherJSON: JSON = JSON(response.result.value!)
                 self.updateWeatherData(json: weatherJSON)
             } else {
+                self.blockUserInteraction()
                 if let error = response.result.error {
+                    self.sessionManager.retrier?.should(self.sessionManager, retry: request, with: error, completion: { (Bool, TimeInterval) in
+                        
+                    })
                     print("Error requesting weather data - \(error)")
                 } else {
                     print("Unknown error requesting weather data")
@@ -135,7 +136,6 @@ class WeatherViewController: UIViewController {
     func updateWeatherData(json: JSON) {
         
         guard
-            let condition = json["list"][0]["weather"][0]["id"].int,
             let openWeatherTemperature = json["list"][0]["main"]["temp"].double,
             let discription = json["list"][0]["weather"][0]["description"].string
             else {
@@ -145,7 +145,6 @@ class WeatherViewController: UIViewController {
         
         updateForecastData(json)
         
-        weatherDataModel.condition = condition
         weatherDataModel.openWeatherTemperature = openWeatherTemperature
         weatherDataModel.discription = discription.capitalizingFirstLetter()
         
@@ -165,7 +164,6 @@ class WeatherViewController: UIViewController {
                     print("Error parsing forecast json")
                     break
             }
-            
             let forecastDate = DateConverter(rawDate: date).weekDay
             let forecastImage = weatherDataModel.updateWeatherIcon(condition: condition)
             let forecast = Forecast(day: forecastDate, temperature: openWeatherTemperature, image: forecastImage)
@@ -218,7 +216,6 @@ class WeatherViewController: UIViewController {
         titleView?.button.label.text = cityNameArray[Constants.userDefaults.integer(forKey: Constants.City.index)]
         backgroundImageView.image = cityImageDictionary[Constants.userDefaults.string(forKey: Constants.City.ID) ?? cityIDArray[0]]
         currentWeatherDiscriptionLabel.text = weatherDataModel.discription
-        currentWeatherIcon.image = weatherDataModel.weatherImage
         
         allowUserInteraction()
     }
@@ -258,6 +255,7 @@ extension WeatherViewController: UITableViewDataSource {
         return cell
     }
 }
+
 
 
 
