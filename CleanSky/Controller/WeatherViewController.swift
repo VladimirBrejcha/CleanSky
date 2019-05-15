@@ -15,8 +15,32 @@ import NVActivityIndicatorView
 class WeatherViewController: UIViewController {
     
     private let cityNameArray = ["Moscow", "London", "New York"]
-    private let cityIDArray = ["524901", "2643743", "5128581"]
-    private let cityImageDictionary = ["524901" : #imageLiteral(resourceName: "Moscow"), "2643743" : #imageLiteral(resourceName: "London"), "5128581" : #imageLiteral(resourceName: "New York")]
+    
+    private var cityID: String {
+            switch Constants.userDefaults.string(forKey: Constants.City.index) {
+            case "0":
+                return "524901"
+            case "1":
+                return "2643743"
+            case "2":
+                return "5128581"
+            default:
+                return "524901"
+        }
+    }
+    
+    private var cityImage: UIImage {
+        switch Constants.userDefaults.string(forKey: Constants.City.index) {
+        case "0":
+            return #imageLiteral(resourceName: "Moscow")
+        case "1":
+            return #imageLiteral(resourceName: "London")
+        case "2":
+            return #imageLiteral(resourceName: "New York")
+        default:
+            return #imageLiteral(resourceName: "Moscow")
+        }
+    }
     
     private var weatherDataModel = WeatherData()
     let sessionManager = SessionManager()
@@ -45,31 +69,40 @@ class WeatherViewController: UIViewController {
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.view.backgroundColor = .clear
         
-        setupSettingsView()
-        setupTemperatureChangingSwitch()
-        setupDropbox()
-        setupActivityIndicator()
-        setupTableView()
+        setupUIElements()
+        
+        setupLatestUsedUI()
+        
         setCity()
     }
     
     //MARK: UIsetup methods
     /***************************************************************/
+    
+    fileprivate func setupUIElements() {
+        setupSettingsView()
+        setupTemperatureChangingSwitch()
+        setupDropbox()
+        setupActivityIndicator()
+        setupTableView()
+    }
+    
     fileprivate func setupDropbox() {
         titleView = TitleView(navigationController: navigationController!,
                               title: "Choose city",
                               items: cityNameArray,
                               initialIndex: Constants.userDefaults.integer(forKey: Constants.City.index))
+        
         titleView?.action = { [weak self] index in
-            let city = self?.cityIDArray[index] //getting id of a current city to save it
             Constants.userDefaults.set(index, forKey: Constants.City.index)
-            Constants.userDefaults.set(city, forKey: Constants.City.ID) //saving current city to use it on app launch
             self?.setCity()
         }
+        
         Config.ArrowButton.Text.selectedColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.topLineColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.List.DefaultCell.separatorColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         Config.List.backgroundColor = #colorLiteral(red: 0.926155746, green: 0.9410773516, blue: 0.9455420375, alpha: 0.09754922945)
+        
         navigationItem.titleView = titleView
     }
     
@@ -99,61 +132,53 @@ class WeatherViewController: UIViewController {
     //MARK: Networking
     /***************************************************************/
     fileprivate func setCity() {
+        
         blockUserInteraction()
-        if let city = Constants.userDefaults.string(forKey: Constants.City.ID) { //setting city based on city id
-            let locationProperties: [String : String] = ["id" : city, "appid" : Constants.OpenWeather.appID]
-            getWeatherData(url:Constants.OpenWeather.requestURL, parameters: locationProperties)
-        } else {
-            let locationProperties: [String : String] = ["id" : cityIDArray[0], "appid" : Constants.OpenWeather.appID] //setting city if city id doesnt exist yet
-            getWeatherData(url:Constants.OpenWeather.requestURL, parameters: locationProperties)
-        }
+        
+        let locationProperties: [String : String] = ["id" : cityID, "appid" : Constants.OpenWeather.appID] //setting city if city id doesnt exist yet
+        getWeatherData(url:Constants.OpenWeather.requestURL, parameters: locationProperties)
     }
     
     fileprivate func getWeatherData(url: String, parameters: [String : String]) {
+        
         sessionManager.retrier = OAuth2Handler()
+        
         let request = sessionManager.request(url, method: .get, parameters: parameters).validate()
+        
         request.responseJSON { response in
             if response.result.isSuccess {
                 print("Get weather data request successefully gotten")
                 let weatherJSON: JSON = JSON(response.result.value!)
                 self.updateWeatherData(json: weatherJSON)
-            } else {
-                self.blockUserInteraction()
-                if let error = response.result.error {
-                    self.sessionManager.retrier?.should(self.sessionManager, retry: request, with: error, completion: { (Bool, TimeInterval) in
-                        
-                    })
-                    print("Error requesting weather data - \(error)")
-                } else {
-                    print("Unknown error requesting weather data")
-                }
             }
         }
     }
     
     //MARK: JSON Parsing && Model updating
     /***************************************************************/
+    
     func updateWeatherData(json: JSON) {
-        
         guard
+            let city = json["city"]["name"].string,
             let openWeatherTemperature = json["list"][0]["main"]["temp"].double,
             let discription = json["list"][0]["weather"][0]["description"].string
             else {
                 print("Error parsing weather json")
                 return
         }
-        
-        updateForecastData(json)
-        
+        weatherDataModel.name = city
         weatherDataModel.openWeatherTemperature = openWeatherTemperature
         weatherDataModel.discription = discription.capitalizingFirstLetter()
         
-        updateUIWithWeatherData()
+        updateForecastData(json) //pasring json for forecasts
+        
+        setDefaultViewValues() //saving latest weather stats to use it on load
+        
+        updateUIWithWeatherData() //updating ui after successefull parsing
     }
     
     fileprivate func updateForecastData(_ json: JSON) {
-        
-        weatherDataModel.forecasts.removeAll()
+        weatherDataModel.forecasts.removeAll() //removing old forecast objects to append new ones
         
         for index in 0...32 where (index == 7 || index == 15 || index == 23 || index == 31) {
             guard
@@ -164,6 +189,7 @@ class WeatherViewController: UIViewController {
                     print("Error parsing forecast json")
                     break
             }
+            
             let forecastDate = DateConverter(rawDate: date).weekDay
             let forecastImage = weatherDataModel.updateWeatherIcon(condition: condition)
             let forecast = Forecast(day: forecastDate, temperature: openWeatherTemperature, image: forecastImage)
@@ -174,8 +200,8 @@ class WeatherViewController: UIViewController {
     
     //MARK: user interaction methods
     /***************************************************************/
-    //this method used to hide settings view on tap outside
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) { //this method used to hide settings view on tap outside
         let touch = touches.first
         if touch?.view != settingsContainerView {
             settingsContainerView.isHidden = true
@@ -193,12 +219,13 @@ class WeatherViewController: UIViewController {
         } else if temperatureValueSettingsSwitch.isOn == false {
             Constants.userDefaults.set("c", forKey: Constants.temperatureValue)
         }
-        updateUIWithtemperature()
+        updateUIWithTemperature()
     }
     
     //MARK: UI Updates
     /***************************************************************/
-    func updateUIWithtemperature() {
+    
+    fileprivate func updateUIWithTemperature() {
         weatherDataModel.openWeatherTemperature = weatherDataModel.openWeatherTemperature
         for index in 0...3 {
             
@@ -208,13 +235,11 @@ class WeatherViewController: UIViewController {
         forecastTableView.reloadData()
     }
     
-    
-    
-    func updateUIWithWeatherData() {
-        updateUIWithtemperature()
+    fileprivate func updateUIWithWeatherData() {
+        updateUIWithTemperature()
         
         titleView?.button.label.text = cityNameArray[Constants.userDefaults.integer(forKey: Constants.City.index)]
-        backgroundImageView.image = cityImageDictionary[Constants.userDefaults.string(forKey: Constants.City.ID) ?? cityIDArray[0]]
+        backgroundImageView.image = cityImage
         currentWeatherDiscriptionLabel.text = weatherDataModel.discription
         
         allowUserInteraction()
@@ -234,8 +259,76 @@ class WeatherViewController: UIViewController {
         activityIndicatorView.startAnimating()
     }
     
-    fileprivate func showLastRecorded() {
+    //MARK: Working with default values for cases where user cant load new data
+    /***************************************************************/
+    
+    fileprivate func setupLatestUsedUI() {
         
+        guard let defaultVersion = Constants.userDefaults.string(forKey: Constants.DefaultData.weatherDisciption) else { return }
+        
+        weatherDataModel.discription = defaultVersion
+        weatherDataModel.openWeatherTemperature = Constants.userDefaults.double(forKey: Constants.DefaultData.openWeatherTemperature)
+        
+        weatherDataModel.forecasts.append(Forecast(day: Constants.userDefaults.string(forKey: Constants.DefaultData.forecastDay1)!,
+                                                   temperature: Constants.userDefaults.double(forKey: Constants.DefaultData.forecastTemperature1),
+                                                   image: UIImage(data: Constants.userDefaults.data(forKey: Constants.DefaultData.forecastImage1)!)!))
+        
+        weatherDataModel.forecasts.append(Forecast(day: Constants.userDefaults.string(forKey: Constants.DefaultData.forecastDay2)!,
+                                                   temperature: Constants.userDefaults.double(forKey: Constants.DefaultData.forecastTemperature2),
+                                                   image: UIImage(data: Constants.userDefaults.data(forKey: Constants.DefaultData.forecastImage2)!)!))
+        
+        weatherDataModel.forecasts.append(Forecast(day: Constants.userDefaults.string(forKey: Constants.DefaultData.forecastDay3)!,
+                                                   temperature: Constants.userDefaults.double(forKey: Constants.DefaultData.forecastTemperature3),
+                                                   image: UIImage(data: Constants.userDefaults.data(forKey: Constants.DefaultData.forecastImage3)!)!))
+        
+        weatherDataModel.forecasts.append(Forecast(day: Constants.userDefaults.string(forKey: Constants.DefaultData.forecastDay4)!,
+                                                   temperature: Constants.userDefaults.double(forKey: Constants.DefaultData.forecastTemperature4),
+                                                   image: UIImage(data: Constants.userDefaults.data(forKey: Constants.DefaultData.forecastImage4)!)!))
+        
+        updateUIWithWeatherData() //updating ui with default data
+    }
+    
+    fileprivate func setDefaultViewValues() {
+        Constants.userDefaults.set(weatherDataModel.discription,
+                                   forKey: Constants.DefaultData.weatherDisciption)
+        Constants.userDefaults.set(weatherDataModel.openWeatherTemperature,
+                                   forKey: Constants.DefaultData.openWeatherTemperature)
+        
+        Constants.userDefaults.set(weatherDataModel.forecasts[0].day,
+                                   forKey: Constants.DefaultData.forecastDay1)
+        
+        Constants.userDefaults.set(weatherDataModel.forecasts[1].day,
+                                   forKey: Constants.DefaultData.forecastDay2)
+        
+        Constants.userDefaults.set(weatherDataModel.forecasts[2].day,
+                                   forKey: Constants.DefaultData.forecastDay3)
+        
+        Constants.userDefaults.set(weatherDataModel.forecasts[3].day,
+                                   forKey: Constants.DefaultData.forecastDay4)
+        
+        Constants.userDefaults.set(weatherDataModel.forecasts[0].weatherImage.pngData(),
+                                   forKey: Constants.DefaultData.forecastImage1)
+        
+        Constants.userDefaults.set(weatherDataModel.forecasts[1].weatherImage.pngData(),
+                                   forKey: Constants.DefaultData.forecastImage2)
+        
+        Constants.userDefaults.set(weatherDataModel.forecasts[2].weatherImage.pngData(),
+                                   forKey: Constants.DefaultData.forecastImage3)
+        
+        Constants.userDefaults.set(weatherDataModel.forecasts[3].weatherImage.pngData(),
+                                   forKey: Constants.DefaultData.forecastImage4)
+        
+        Constants.userDefaults.set(weatherDataModel.forecasts[0].openWeatherTemperature,
+                                   forKey: Constants.DefaultData.forecastTemperature1)
+        
+        Constants.userDefaults.set(weatherDataModel.forecasts[1].openWeatherTemperature,
+                                   forKey: Constants.DefaultData.forecastTemperature2)
+        
+        Constants.userDefaults.set(weatherDataModel.forecasts[2].openWeatherTemperature,
+                                   forKey: Constants.DefaultData.forecastTemperature3)
+        
+        Constants.userDefaults.set(weatherDataModel.forecasts[3].openWeatherTemperature,
+                                   forKey: Constants.DefaultData.forecastTemperature4)
     }
 }
 

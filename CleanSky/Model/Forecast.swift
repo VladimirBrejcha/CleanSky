@@ -9,14 +9,14 @@
 import UIKit
 
 struct Forecast {
-    let day: String
+    var day: String
     var openWeatherTemperature: Double {
         willSet {
             convertedTemperature = Temperature(openWeatherMapDegrees: newValue).degrees
         }
     }
     var convertedTemperature: String?
-    let weatherImage: UIImage
+    var weatherImage: UIImage
     
     init(day: String, temperature: Double, image: UIImage) {
         self.day = day

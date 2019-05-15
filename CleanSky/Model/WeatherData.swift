@@ -11,6 +11,8 @@ import UIKit
 struct WeatherData {
     
     var discription: String?
+    var name: String?
+    var id: String?
     var openWeatherTemperature: Double? {
         willSet {
             convertedTemperature = Temperature(openWeatherMapDegrees: newValue!).degrees

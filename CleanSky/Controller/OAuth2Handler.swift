@@ -12,6 +12,5 @@ import Alamofire
 class OAuth2Handler: RequestRetrier {
     public func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: RequestRetryCompletion) {
             completion(true, 2.0) // retry after 2 seconds
-        print("Trying to reconnect...")
     }
 }
