@@ -10,9 +10,12 @@ import UIKit
 
 struct WeatherData {
     
-    var city: String?
     var discription: String?
-    var openWeatherTemperature: Double?
+    var openWeatherTemperature: Double? {
+        willSet {
+            convertedTemperature = Temperature(openWeatherMapDegrees: newValue!).degrees
+        }
+    }
     var convertedTemperature: String?
     var condition: Int? {
         willSet {

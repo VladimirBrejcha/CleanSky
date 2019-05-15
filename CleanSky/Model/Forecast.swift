@@ -10,7 +10,11 @@ import UIKit
 
 struct Forecast {
     let day: String
-    var openWeatherTemperature: Double
+    var openWeatherTemperature: Double {
+        willSet {
+            convertedTemperature = Temperature(openWeatherMapDegrees: newValue).degrees
+        }
+    }
     var convertedTemperature: String?
     let weatherImage: UIImage
     
@@ -18,12 +22,5 @@ struct Forecast {
         self.day = day
         openWeatherTemperature = temperature
         weatherImage = image
-        updateTemperatureValues()
     }
-    //TODO: move this functionality into computed property
-    mutating func updateTemperatureValues () {
-        let temperature = Temperature(openWeatherMapDegrees: openWeatherTemperature)
-        self.convertedTemperature = temperature.degrees
-    }
-    
 }

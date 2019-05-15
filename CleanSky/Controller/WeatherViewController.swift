@@ -29,6 +29,7 @@ class WeatherViewController: UIViewController {
                                                                       height: 20), type: .ballClipRotate)
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var settingsContainerView: UIView!
+    @IBOutlet weak var settingsButton: UIBarButtonItem!
     @IBOutlet weak var temperatureValueSettingsSwitch: UISwitch!
     @IBOutlet weak var currentWeatherLabel: UILabel!
     @IBOutlet weak var currentWeatherIcon: UIImageView!
@@ -44,7 +45,7 @@ class WeatherViewController: UIViewController {
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.view.backgroundColor = .clear
         
-        settingsContainerView.layer.cornerRadius = 20
+        setupSettingsView()
         setupTemperatureChangingSwitch()
         setupDropbox()
         setupActivityIndicator()
@@ -60,6 +61,8 @@ class WeatherViewController: UIViewController {
                               title: "Choose city",
                               items: cityNameArray,
                               initialIndex: Constants.userDefaults.integer(forKey: Constants.City.index))
+        titleView.alpha = 0.35
+        titleView.isUserInteractionEnabled = false
         titleView?.action = { [weak self] index in
             let city = self?.cityIDArray[index] //getting id of a current city to save it
             Constants.userDefaults.set(index, forKey: Constants.City.index)
@@ -79,6 +82,11 @@ class WeatherViewController: UIViewController {
         } else {
             temperatureValueSettingsSwitch.isOn = false
         }
+    }
+    
+    fileprivate func setupSettingsView() {
+        settingsContainerView.layer.cornerRadius = 20
+        settingsButton.isEnabled = false
     }
     
     fileprivate func setupActivityIndicator() {
@@ -106,6 +114,7 @@ class WeatherViewController: UIViewController {
     }
     
     fileprivate func getWeatherData(url: String, parameters: [String : String]) {
+        
         Alamofire.request(url, method: .get, parameters: parameters).responseJSON { response in
             if response.result.isSuccess {
                 print("Get weather data request successefully gotten")
@@ -126,7 +135,6 @@ class WeatherViewController: UIViewController {
     func updateWeatherData(json: JSON) {
         
         guard
-            let city = json["city"]["name"].string,
             let condition = json["list"][0]["weather"][0]["id"].int,
             let openWeatherTemperature = json["list"][0]["main"]["temp"].double,
             let discription = json["list"][0]["weather"][0]["description"].string
@@ -138,7 +146,6 @@ class WeatherViewController: UIViewController {
         updateForecastData(json)
         
         weatherDataModel.condition = condition
-        weatherDataModel.city = city
         weatherDataModel.openWeatherTemperature = openWeatherTemperature
         weatherDataModel.discription = discription.capitalizingFirstLetter()
         
@@ -149,7 +156,7 @@ class WeatherViewController: UIViewController {
         
         weatherDataModel.forecasts.removeAll()
         
-        for index in 0...32 where (index == 8 || index == 16 || index == 24 || index == 32) {
+        for index in 0...32 where (index == 7 || index == 15 || index == 23 || index == 31) {
             guard
                 let date = json["list"][index]["dt"].double,
                 let openWeatherTemperature = json["list"][index]["main"]["temp"].double,
@@ -169,7 +176,6 @@ class WeatherViewController: UIViewController {
     
     //MARK: user interaction methods
     /***************************************************************/
-    
     //this method used to hide settings view on tap outside
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
@@ -194,29 +200,47 @@ class WeatherViewController: UIViewController {
     
     //MARK: UI Updates
     /***************************************************************/
-    
     func updateUIWithtemperature() {
-        let currentTemperature = Temperature(openWeatherMapDegrees: weatherDataModel.openWeatherTemperature!)
-        weatherDataModel.convertedTemperature = currentTemperature.degrees
-        currentWeatherLabel.text = weatherDataModel.convertedTemperature
+        weatherDataModel.openWeatherTemperature = weatherDataModel.openWeatherTemperature
         for index in 0...3 {
-            weatherDataModel.forecasts[index].updateTemperatureValues()
+            
+            weatherDataModel.forecasts[index].openWeatherTemperature = weatherDataModel.forecasts[index].openWeatherTemperature
         }
+        currentWeatherLabel.text = weatherDataModel.convertedTemperature
         forecastTableView.reloadData()
     }
-
+    
+    
+    
     func updateUIWithWeatherData() {
         updateUIWithtemperature()
+        
+        titleView?.button.label.text = cityNameArray[Constants.userDefaults.integer(forKey: Constants.City.index)]
+        backgroundImageView.image = cityImageDictionary[Constants.userDefaults.string(forKey: Constants.City.ID) ?? cityIDArray[0]]
         currentWeatherDiscriptionLabel.text = weatherDataModel.discription
-        titleView?.button.label.text = weatherDataModel.city
         currentWeatherIcon.image = weatherDataModel.weatherImage
-        backgroundImageView.image = cityImageDictionary[Constants.userDefaults.string(forKey: Constants.City.ID) ?? "524901"]
+        
+        allowUserInteraction()
+    }
+    
+    fileprivate func allowUserInteraction() {
+        titleView.alpha = 1.0
+        titleView.isUserInteractionEnabled = true
+        settingsButton.isEnabled = true
         activityIndicatorView.stopAnimating()
     }
-
+    
+    fileprivate func blockUserInteraction() {
+        titleView.alpha = 0.35
+        titleView.isUserInteractionEnabled = false
+        settingsButton.isEnabled = false
+        activityIndicatorView.startAnimating()
+    }
+    
+    fileprivate func showLastRecorded() {
+        
+    }
 }
-
-
 
 extension WeatherViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -228,13 +252,11 @@ extension WeatherViewController: UITableViewDataSource {
                                                  for: indexPath) as! ForecastTableViewCell
         if weatherDataModel.forecasts.isEmpty == false  {
             cell.dayLabel.text = weatherDataModel.forecasts[indexPath.row].day
-            cell.temperatureLabel.text = String((weatherDataModel.forecasts[indexPath.row].convertedTemperature!))
+            cell.temperatureLabel.text = (weatherDataModel.forecasts[indexPath.row].convertedTemperature!)
             cell.weatherImageView.image = weatherDataModel.forecasts[indexPath.row].weatherImage
         }
         return cell
     }
-    
-    
 }
 
 
