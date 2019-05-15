@@ -13,7 +13,6 @@ struct Constants {
     static let userDefaults = UserDefaults.standard
     
     struct City {
-        static let ID = "CityID"
         static let index = "CityIndex"
     }
     

@@ -23,6 +23,14 @@ struct DateConverter {
         
         return String(weekDayName)
     }
+//    var currentDay: String {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "dd"
+//        
+//        let day: String = dateFormatter.string(from: date)
+//        
+//        return String(day)
+//    }
 }
 
 

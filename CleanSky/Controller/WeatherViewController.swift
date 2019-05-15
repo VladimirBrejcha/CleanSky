@@ -141,7 +141,7 @@ class WeatherViewController: UIViewController {
     
     fileprivate func getWeatherData(url: String, parameters: [String : String]) {
         
-        sessionManager.retrier = OAuth2Handler()
+        sessionManager.retrier = CustomRequestRetrier()
         
         let request = sessionManager.request(url, method: .get, parameters: parameters).validate()
         
