@@ -160,12 +160,15 @@ class WeatherViewController: UIViewController {
     func updateWeatherData(json: JSON) {
         guard
             let city = json["city"]["name"].string,
+            let date = json["list"][0]["dt"].double,
             let openWeatherTemperature = json["list"][0]["main"]["temp"].double,
             let discription = json["list"][0]["weather"][0]["description"].string
             else {
                 print("Error parsing weather json")
                 return
         }
+        let currentDate1 = DateConverter(rawDate: date).date
+        Constants.userDefaults.set(currentDate1, forKey: Constants.DefaultData.currentDay)
         weatherDataModel.name = city
         weatherDataModel.openWeatherTemperature = openWeatherTemperature
         weatherDataModel.discription = discription.capitalizingFirstLetter()
@@ -266,6 +269,21 @@ class WeatherViewController: UIViewController {
         
         guard let defaultVersion = Constants.userDefaults.string(forKey: Constants.DefaultData.weatherDisciption) else { return }
         
+//        let currentDate = Date()
+        let calendar = Calendar.current
+//        let components = calendar.dateComponents([.year, .month, .day], from: currentDate)
+//        let day = components.day
+        let defDay = Constants.userDefaults.object(forKey: Constants.DefaultData.currentDay) as! Date
+        if calendar.isDateInToday(defDay) == true {
+            print("\(defDay) is current day")
+        } else {
+            print("\(defDay) is not current day")
+        }
+            
+        
+//        print(day)
+        //        calendar.compare(currentDate, to: <#T##Date#>, toGranularity: Calendar.Component.day)
+        
         weatherDataModel.discription = defaultVersion
         weatherDataModel.openWeatherTemperature = Constants.userDefaults.double(forKey: Constants.DefaultData.openWeatherTemperature)
         
@@ -289,6 +307,7 @@ class WeatherViewController: UIViewController {
     }
     
     fileprivate func setDefaultViewValues() {
+
         Constants.userDefaults.set(weatherDataModel.discription,
                                    forKey: Constants.DefaultData.weatherDisciption)
         Constants.userDefaults.set(weatherDataModel.openWeatherTemperature,

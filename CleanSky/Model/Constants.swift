@@ -19,6 +19,7 @@ struct Constants {
     static let temperatureValue = "temperatureValue"
     
     struct DefaultData {
+        static let currentDay = "day"
         static let weatherDisciption = "discription"
         static let openWeatherTemperature = "temperature"
         static let forecastDay1 = "day1"

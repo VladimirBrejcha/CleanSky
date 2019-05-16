@@ -9,10 +9,9 @@
 import UIKit
 
 struct WeatherData {
-    
-    var discription: String?
-    var name: String?
+    var name: String? 
     var id: String?
+    var discription: String?
     var openWeatherTemperature: Double? {
         willSet {
             convertedTemperature = Temperature(openWeatherMapDegrees: newValue!).degrees
@@ -21,8 +20,7 @@ struct WeatherData {
     var convertedTemperature: String?
     var forecasts = [Forecast]()
     
-    //This method turns a condition code into the weather condition image
-    func updateWeatherIcon(condition: Int) -> UIImage {
+    func updateWeatherIcon(condition: Int) -> UIImage { //This method turns a condition code into the weather condition image
         
         switch (condition) {
         case 0...300 :
