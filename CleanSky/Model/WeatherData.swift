@@ -9,16 +9,16 @@
 import UIKit
 
 struct WeatherData {
-    var name: String? 
-    var id: String?
-    var discription: String?
-    var openWeatherTemperature: Double? {
+    var name: String? //weather city name
+    var id: String? // weather city id
+    var discription: String? //weather discription
+    var openWeatherTemperature: Double? { //temperature given by OpenWeatherAPI
         willSet {
             convertedTemperature = Temperature(openWeatherMapDegrees: newValue!).degrees
         }
     }
-    var convertedTemperature: String?
-    var forecasts = [Forecast]()
+    var convertedTemperature: String? //converted to Celsius or Fahrinheit temperature
+    var forecasts = [Forecast]() //forecast for 4 next days
     
     func updateWeatherIcon(condition: Int) -> UIImage { //This method turns a condition code into the weather condition image
         

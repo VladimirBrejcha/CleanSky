@@ -9,10 +9,10 @@
 import Foundation
 
 struct Temperature {
-    let degrees: String
+    let degrees: String 
     
     init(openWeatherMapDegrees: Double) {
-
+        
         if Constants.userDefaults.string(forKey: Constants.temperatureValue) == "f" {
             degrees = String(Int(TemperatureConverter.kelvinToFahrenheit(openWeatherMapDegrees))) + "°"
         } else {

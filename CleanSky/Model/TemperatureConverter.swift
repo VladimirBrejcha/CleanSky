@@ -9,6 +9,7 @@
 import Foundation
 
 struct TemperatureConverter {
+    
     static func kelvinToCelsius(_ degrees: Double) -> Double {
         return round(degrees - 273.15)
     }

@@ -9,27 +9,21 @@
 import Foundation
 
 struct DateConverter {
+    
     let rawDate: Double
     
     var date: Date {
         return Date(timeIntervalSince1970: rawDate)
     }
     
-    var weekDay: String {
+    var weekDay: String { //getting string for weekday name
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE"
         
         let weekDayName: String = dateFormatter.string(from: date)
         
-        return String(weekDayName)
-    }
-    
-    var currentDay: Int {
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.day], from: date)
-        guard let day = components.day else { return 1 }
-        
-        return day - 1
+        return weekDayName
     }
 }
 

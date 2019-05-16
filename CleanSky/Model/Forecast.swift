@@ -9,14 +9,14 @@
 import UIKit
 
 struct Forecast {
-    var day: String
-    var openWeatherTemperature: Double {
+    var day: String //weekday for forecast
+    var openWeatherTemperature: Double { //given by OpenWeatherAPI temperature
         willSet {
             convertedTemperature = Temperature(openWeatherMapDegrees: newValue).degrees
         }
     }
-    var convertedTemperature: String?
-    var weatherImage: UIImage
+    var convertedTemperature: String? //converted to Celsius or Fahrinheit temperature
+    var weatherImage: UIImage //icon for forecast
     
     init(day: String, temperature: Double, image: UIImage) {
         self.day = day
