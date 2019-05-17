@@ -1,5 +1,6 @@
 # CleanSky
-Weather application
+CleanSky is an simply iOS weather app developed in Swift 5.
+![gitGub](https://user-images.githubusercontent.com/44097057/57934500-8a43c400-78c8-11e9-9922-3d9d6d03929d.png)
 
 ### Libraries used:
 
