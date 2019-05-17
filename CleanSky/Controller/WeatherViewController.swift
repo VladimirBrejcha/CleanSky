@@ -7,10 +7,10 @@
 //
 
 import UIKit
-import Dropdowns
 import Alamofire
 import SwiftyJSON
 import NVActivityIndicatorView
+import NavigationDropdownMenu
 
 class WeatherViewController: UIViewController {
     
@@ -47,7 +47,7 @@ class WeatherViewController: UIViewController {
     private let sessionManager = SessionManager()
     
     //MARK: UI elements
-    private var titleView: TitleView!
+    private var menuView: NavigationDropdownMenu!
     
     private let activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 20,
                                                                               y: 30,
@@ -99,22 +99,27 @@ class WeatherViewController: UIViewController {
     }
     
     fileprivate func setupDropbox() {
-        titleView = TitleView(navigationController: navigationController!,
-                              title: "Choose city",
-                              items: cityNameArray,
-                              initialIndex: initialIndex)
+        menuView = NavigationDropdownMenu(navigationController: self.navigationController,
+                                              containerView: self.navigationController!.view,
+                                              title: Title.index(initialIndex),
+                                              items: cityNameArray)
         
-        titleView?.action = { [weak self] index in
-            self?.initialIndex = index
+        menuView.didSelectItemAtIndexHandler = {[weak self] (indexPath: Int) -> () in
+            self?.initialIndex = indexPath
             self?.changeCity()
         }
         
-        Config.ArrowButton.Text.selectedColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        Config.topLineColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        Config.List.DefaultCell.separatorColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        Config.List.backgroundColor = #colorLiteral(red: 0.926155746, green: 0.9410773516, blue: 0.9455420375, alpha: 0.09754922945)
+        menuView.animationDuration = 0.25
+        menuView.shouldKeepSelectedCellColor = true
+        menuView.cellBackgroundColor = #colorLiteral(red: 0.1490027606, green: 0.1490303874, blue: 0.1489966214, alpha: 0.2467264525)
+        menuView.cellSelectionColor =  #colorLiteral(red: 0.1490027606, green: 0.1490303874, blue: 0.1489966214, alpha: 0.2467264525)
+        menuView.cellTextLabelColor = #colorLiteral(red: 0.926155746, green: 0.9410773516, blue: 0.9455420375, alpha: 1)
+        menuView.cellSeparatorColor = #colorLiteral(red: 0.926155746, green: 0.9410773516, blue: 0.9455420375, alpha: 0.5102057658)
+        menuView.maskBackgroundOpacity = 0.55
+        menuView.cellTextLabelAlignment = .center
+        menuView.cellTextLabelFont = UIFont.systemFont(ofSize: 18)
         
-        navigationItem.titleView = titleView
+        self.navigationItem.titleView = menuView
     }
     
     fileprivate func setupActivityIndicator() {
@@ -240,7 +245,7 @@ class WeatherViewController: UIViewController {
         
         updateUIWithTemperature()
         
-        titleView?.button.label.text = cityNameArray[Constants.userDefaults.integer(forKey: Constants.CityIndex)]
+        self.title = self.cityNameArray[Constants.userDefaults.integer(forKey: Constants.CityIndex)]
         backgroundImageView.image = cityImage
         currentWeatherDiscriptionLabel.text = weatherDataModel.discription
         
@@ -249,15 +254,15 @@ class WeatherViewController: UIViewController {
     }
     
     fileprivate func allowUserInteraction() {
-        titleView.alpha = 1.0
-        titleView.isUserInteractionEnabled = true
+        menuView.alpha = 1.0
+        menuView.isUserInteractionEnabled = true
         settingsButton.isEnabled = true
         activityIndicatorView.stopAnimating()
     }
     
     fileprivate func blockUserInteraction() {
-        titleView.alpha = 0.35
-        titleView.isUserInteractionEnabled = false
+        menuView.alpha = 0.35
+        menuView.isUserInteractionEnabled = false
         settingsButton.isEnabled = false
         activityIndicatorView.startAnimating()
     }
