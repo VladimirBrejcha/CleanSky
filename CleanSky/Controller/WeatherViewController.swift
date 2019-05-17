@@ -15,7 +15,7 @@ import NavigationDropdownMenu
 class WeatherViewController: UIViewController {
     
     private let cityNameArray = ["Moscow", "London", "New York"]
-    private var initialIndex = Constants.userDefaults.integer(forKey: Constants.CityIndex)
+    private var initialIndex = Constants.userDefaults.integer(forKey: Constants.сityIndex)
     
     private var cityID: String {
         switch initialIndex {
@@ -253,7 +253,7 @@ class WeatherViewController: UIViewController {
         
         updateUIWithTemperature()
         
-        title = cityNameArray[Constants.userDefaults.integer(forKey: Constants.CityIndex)]
+        title = cityNameArray[Constants.userDefaults.integer(forKey: Constants.сityIndex)]
         backgroundImageView.image = cityImage
         currentWeatherDiscriptionLabel.text = weatherDataModel.discription
         
@@ -322,7 +322,7 @@ class WeatherViewController: UIViewController {
     
     fileprivate func saveLatestUsedWeatherValues() {
         Constants.userDefaults.set(initialIndex,
-                                   forKey: Constants.CityIndex)
+                                   forKey: Constants.сityIndex)
 
         Constants.userDefaults.set(weatherDataModel.discription,
                                    forKey: Constants.DefaultData.weatherDisciption)

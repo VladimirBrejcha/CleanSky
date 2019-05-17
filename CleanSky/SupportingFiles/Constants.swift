@@ -12,7 +12,7 @@ struct Constants {
     
     static let userDefaults = UserDefaults.standard
     
-    static let CityIndex = "CityIndex"
+    static let сityIndex = "CityIndex"
     
     static let temperatureValue = "temperatureValue"
     
