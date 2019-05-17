@@ -20,7 +20,7 @@ struct WeatherData {
     var convertedTemperature: String? //converted to Celsius or Fahrinheit temperature
     var forecasts = [Forecast]() //forecast for 4 next days
     
-    func updateWeatherIcon(condition: Int) -> UIImage { //This method turns a condition code into the weather condition image
+    internal func updateWeatherIcon(condition: Int) -> UIImage { //This method turns a condition code into the weather condition image
         
         switch (condition) {
         case 0...300 :
