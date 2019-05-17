@@ -61,13 +61,14 @@
                         </constraints>
                     </view>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="xLx-VQ-KtT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-15" id="1pn-S6-mMd"/>
                     <constraint firstItem="xLx-VQ-KtT" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Kzf-AK-Vbm"/>
                     <constraint firstItem="xLx-VQ-KtT" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="jtU-Zg-KLX"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" red="0.11181893199682236" green="0.1118365004658699" blue="0.1118125319480896" alpha="0.0" colorSpace="calibratedRGB"/>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="dayLabel" destination="TO6-dm-Rm4" id="4v4-qs-e1f"/>

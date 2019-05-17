@@ -48,11 +48,11 @@ class WeatherViewController: UIViewController {
     
     //MARK: UI elements
     private var menuView: NavigationDropdownMenu!
-    
-    private let activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 20,
-                                                                              y: 30,
+    private var activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 0,
+                                                                              y: 0,
                                                                               width: 20,
                                                                               height: 20), type: .ballClipRotate)
+    
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var settingsContainerView: UIView!
     @IBOutlet weak var settingsButton: UIBarButtonItem!
@@ -60,6 +60,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var currentWeatherLabel: UILabel!
     @IBOutlet weak var currentWeatherDiscriptionLabel: UILabel!
     @IBOutlet weak var forecastTableView: UITableView!
+    @IBOutlet weak var leftNavBarItem: UIBarButtonItem!
     
     //MARK: Controller life cycle methods
     /***************************************************************/
@@ -69,11 +70,20 @@ class WeatherViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.view.backgroundColor = .clear
+        
         setupUIElements()
         
         setLatestUsedWeatherValues()
-        
         changeCity()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let statusBarF = UIApplication.shared.statusBarFrame.height
+        activityIndicatorView.frame = CGRect(x: 20,
+                                             y: 10 + statusBarF,
+                                             width: 20,
+                                             height: 20)
     }
     
     //MARK: UIsetup methods
@@ -123,8 +133,8 @@ class WeatherViewController: UIViewController {
     }
     
     fileprivate func setupActivityIndicator() {
-        let currentWindow: UIWindow? = UIApplication.shared.keyWindow
-        currentWindow?.addSubview(activityIndicatorView)
+//        let currentWindow: UIWindow? = UIApplication.shared.keyWindow
+        view.addSubview(activityIndicatorView)
     }
     
     fileprivate func setupTableView() {
@@ -250,7 +260,6 @@ class WeatherViewController: UIViewController {
         currentWeatherDiscriptionLabel.text = weatherDataModel.discription
         
         allowUserInteraction()
-        
     }
     
     fileprivate func allowUserInteraction() {
