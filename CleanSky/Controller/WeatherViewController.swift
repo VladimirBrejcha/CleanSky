@@ -52,7 +52,6 @@ class WeatherViewController: UIViewController {
                                                                               y: 0,
                                                                               width: 20,
                                                                               height: 20), type: .ballClipRotate)
-    
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var settingsContainerView: UIView!
     @IBOutlet weak var settingsButton: UIBarButtonItem!
@@ -60,10 +59,10 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var currentWeatherLabel: UILabel!
     @IBOutlet weak var currentWeatherDiscriptionLabel: UILabel!
     @IBOutlet weak var forecastTableView: UITableView!
-    @IBOutlet weak var leftNavBarItem: UIBarButtonItem!
     
     //MARK: Controller life cycle methods
     /***************************************************************/
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -74,30 +73,33 @@ class WeatherViewController: UIViewController {
         setupUIElements()
         
         setLatestUsedWeatherValues()
+        
         changeCity()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let statusBarF = UIApplication.shared.statusBarFrame.height
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
         activityIndicatorView.frame = CGRect(x: 20,
-                                             y: 10 + statusBarF,
+                                             y: 10 + statusBarHeight,
                                              width: 20,
                                              height: 20)
     }
     
     //MARK: UIsetup methods
     /***************************************************************/
-    fileprivate func setupUIElements() {
-        setupSettingsView()
-        setupTemperatureChangingSwitch()
-        setupDropbox()
-        setupActivityIndicator()
-        setupTableView()
-    }
     
-    fileprivate func setupSettingsView() {
+    fileprivate func setupUIElements() {
+        
         settingsContainerView.layer.cornerRadius = 20
+        
+        setupTemperatureChangingSwitch()
+        
+        setupDropbox()
+        
+        view.addSubview(activityIndicatorView)
+        
+        setupTableView()
     }
     
     fileprivate func setupTemperatureChangingSwitch() {
@@ -109,6 +111,7 @@ class WeatherViewController: UIViewController {
     }
     
     fileprivate func setupDropbox() {
+        
         menuView = NavigationDropdownMenu(navigationController: self.navigationController,
                                               containerView: self.navigationController!.view,
                                               title: Title.index(initialIndex),
@@ -120,21 +123,16 @@ class WeatherViewController: UIViewController {
         }
         
         menuView.animationDuration = 0.25
+        menuView.maskBackgroundOpacity = 0.55
+        menuView.cellTextLabelAlignment = .center
+        menuView.cellTextLabelFont = UIFont.systemFont(ofSize: 18)
         menuView.shouldKeepSelectedCellColor = true
         menuView.cellBackgroundColor = #colorLiteral(red: 0.1490027606, green: 0.1490303874, blue: 0.1489966214, alpha: 0.2467264525)
         menuView.cellSelectionColor =  #colorLiteral(red: 0.1490027606, green: 0.1490303874, blue: 0.1489966214, alpha: 0.2467264525)
         menuView.cellTextLabelColor = #colorLiteral(red: 0.926155746, green: 0.9410773516, blue: 0.9455420375, alpha: 1)
         menuView.cellSeparatorColor = #colorLiteral(red: 0.926155746, green: 0.9410773516, blue: 0.9455420375, alpha: 0.5102057658)
-        menuView.maskBackgroundOpacity = 0.55
-        menuView.cellTextLabelAlignment = .center
-        menuView.cellTextLabelFont = UIFont.systemFont(ofSize: 18)
         
         self.navigationItem.titleView = menuView
-    }
-    
-    fileprivate func setupActivityIndicator() {
-//        let currentWindow: UIWindow? = UIApplication.shared.keyWindow
-        view.addSubview(activityIndicatorView)
     }
     
     fileprivate func setupTableView() {
@@ -145,6 +143,7 @@ class WeatherViewController: UIViewController {
     
     //MARK: user interaction methods
     /***************************************************************/
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) { //this method used to hide settings view on tap outside
         let touch = touches.first
         if touch?.view != settingsContainerView {
@@ -157,11 +156,11 @@ class WeatherViewController: UIViewController {
     }
     
     @IBAction func temperatureValueSwitchAction(_ sender: UISwitch) {
-        if temperatureValueSettingsSwitch.isOn {
-            Constants.userDefaults.set("f", forKey: Constants.temperatureValue)
-        } else if temperatureValueSettingsSwitch.isOn == false {
-            Constants.userDefaults.set("c", forKey: Constants.temperatureValue)
-        }
+        
+        let value = temperatureValueSettingsSwitch.isOn ? "f" : "c"
+        
+        Constants.userDefaults.set(value, forKey: Constants.temperatureValue)
+        
         updateUIWithTemperature()
     }
     
@@ -169,10 +168,13 @@ class WeatherViewController: UIViewController {
     /***************************************************************/
     fileprivate func changeCity() {
         
-        blockUserInteraction()
+        isUserInteractionAllowed(false)
         
-        let locationProperties: [String : String] = ["id" : cityID, "appid" : Constants.OpenWeather.appID] //setting city if city id doesnt exist yet
-        getWeatherData(url:Constants.OpenWeather.requestURL, parameters: locationProperties)
+        let locationProperties = ["id" : cityID,
+                                  "appid" : Constants.OpenWeather.appID]
+        
+        getWeatherData(url:Constants.OpenWeather.requestURL,
+                       parameters: locationProperties)
     }
     
     fileprivate func getWeatherData(url: String, parameters: [String : String]) {
@@ -184,18 +186,28 @@ class WeatherViewController: UIViewController {
         request.responseJSON { response in
             if response.result.isSuccess {
                 print("Get weather data request successefully gotten")
-                Constants.userDefaults.set(self.initialIndex, forKey: Constants.CityIndex)
                 let weatherJSON: JSON = JSON(response.result.value!)
-                self.updateWeatherData(json: weatherJSON)
+                self.updateData(json: weatherJSON)
             }
         }
     }
     
     //MARK: JSON Parsing && Model updating
     /***************************************************************/
-    fileprivate func updateWeatherData(json: JSON) {
+    
+    fileprivate func updateData(json: JSON) {
+        
+        updateWeatherData(json) //pasring json for weather and append values to model
+        
+        updateForecastData(json) //pasring json for forecasts and append values to model
+        
+        saveLatestUsedWeatherValues() //saving latest weather stats to use it on load
+        
+        updateUIWithWeatherData() //updating ui after successefull parsing
+    }
+    
+    fileprivate func updateWeatherData(_ json: JSON) {
         guard
-            let city = json["city"]["name"].string,
             let date = json["list"][0]["dt"].double,
             let openWeatherTemperature = json["list"][0]["main"]["temp"].double,
             let discription = json["list"][0]["weather"][0]["description"].string
@@ -203,22 +215,19 @@ class WeatherViewController: UIViewController {
                 print("Error parsing weather json")
                 return
         }
+        
         let currentDate = DateConverter(rawDate: date).date
+        //saving date of request to compare it with actual date on app launch
         Constants.userDefaults.set(currentDate, forKey: Constants.DefaultData.currentDay)
         
-        weatherDataModel.name = city
         weatherDataModel.openWeatherTemperature = openWeatherTemperature
         weatherDataModel.discription = discription.capitalizingFirstLetter()
-        
-        updateForecastData(json) //pasring json for forecasts
-        
-        saveLatestUsedWeatherValues() //saving latest weather stats to use it on load
-        
-        updateUIWithWeatherData() //updating ui after successefull parsing
     }
     
     fileprivate func updateForecastData(_ json: JSON) {
+        
         weatherDataModel.forecasts.removeAll() //removing old forecast objects to append new ones
+        
         let index = [7, 15, 23, 31]
         for index in index {
             guard
@@ -233,15 +242,28 @@ class WeatherViewController: UIViewController {
             let forecastDate = DateConverter(rawDate: date).weekDay
             let forecastImage = weatherDataModel.updateWeatherIcon(condition: condition)
             let forecast = Forecast(day: forecastDate, temperature: openWeatherTemperature, image: forecastImage)
-            
             weatherDataModel.forecasts.append(forecast)
         }
     }
     
     //MARK: UI Updates
     /***************************************************************/
+    
+    fileprivate func updateUIWithWeatherData() {
+        
+        updateUIWithTemperature()
+        
+        title = cityNameArray[Constants.userDefaults.integer(forKey: Constants.CityIndex)]
+        backgroundImageView.image = cityImage
+        currentWeatherDiscriptionLabel.text = weatherDataModel.discription
+        
+        isUserInteractionAllowed(true)
+    }
+    
     fileprivate func updateUIWithTemperature() {
+        
         weatherDataModel.openWeatherTemperature = weatherDataModel.openWeatherTemperature
+        
         for index in 0...3 {
             weatherDataModel.forecasts[index].openWeatherTemperature = weatherDataModel.forecasts[index].openWeatherTemperature
         }
@@ -251,29 +273,14 @@ class WeatherViewController: UIViewController {
         forecastTableView.reloadData()
     }
     
-    fileprivate func updateUIWithWeatherData() {
-        
-        updateUIWithTemperature()
-        
-        self.title = self.cityNameArray[Constants.userDefaults.integer(forKey: Constants.CityIndex)]
-        backgroundImageView.image = cityImage
-        currentWeatherDiscriptionLabel.text = weatherDataModel.discription
-        
-        allowUserInteraction()
-    }
-    
-    fileprivate func allowUserInteraction() {
-        menuView.alpha = 1.0
-        menuView.isUserInteractionEnabled = true
-        settingsButton.isEnabled = true
-        activityIndicatorView.stopAnimating()
-    }
-    
-    fileprivate func blockUserInteraction() {
-        menuView.alpha = 0.35
-        menuView.isUserInteractionEnabled = false
-        settingsButton.isEnabled = false
-        activityIndicatorView.startAnimating()
+    fileprivate func isUserInteractionAllowed(_ isAllowed: Bool) {
+        settingsButton.isEnabled = isAllowed
+        menuView.isUserInteractionEnabled = isAllowed
+        isAllowed
+            ? (self.activityIndicatorView.stopAnimating(),
+               menuView.alpha = 1.0)
+            : (activityIndicatorView.startAnimating(),
+               menuView.alpha = 0.35)
     }
     
     //MARK: Working with default values for cases where user cant load new data
@@ -285,7 +292,8 @@ class WeatherViewController: UIViewController {
         let calendar = Calendar.current
         let latestUsedDate = Constants.userDefaults.object(forKey: Constants.DefaultData.currentDay) as! Date
         
-        if calendar.isDateInToday(latestUsedDate) == true {
+        if calendar.isDateInToday(latestUsedDate) {
+            
             weatherDataModel.discription = defaultVersion
             weatherDataModel.openWeatherTemperature = Constants.userDefaults.double(forKey: Constants.DefaultData.openWeatherTemperature)
             
@@ -313,9 +321,12 @@ class WeatherViewController: UIViewController {
     }
     
     fileprivate func saveLatestUsedWeatherValues() {
-        
+        Constants.userDefaults.set(initialIndex,
+                                   forKey: Constants.CityIndex)
+
         Constants.userDefaults.set(weatherDataModel.discription,
                                    forKey: Constants.DefaultData.weatherDisciption)
+        
         Constants.userDefaults.set(weatherDataModel.openWeatherTemperature,
                                    forKey: Constants.DefaultData.openWeatherTemperature)
         
@@ -369,11 +380,12 @@ extension WeatherViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cell.identifier,
                                                  for: indexPath) as! ForecastTableViewCell
         
-        if weatherDataModel.forecasts.isEmpty == false  {
-            cell.dayLabel.text = weatherDataModel.forecasts[indexPath.row].day
-            cell.temperatureLabel.text = weatherDataModel.forecasts[indexPath.row].convertedTemperature!
-            cell.weatherImageView.image = weatherDataModel.forecasts[indexPath.row].weatherImage
-        }
+        guard !weatherDataModel.forecasts.isEmpty else { return cell }
+        
+        cell.dayLabel.text = weatherDataModel.forecasts[indexPath.row].day
+        cell.temperatureLabel.text = weatherDataModel.forecasts[indexPath.row].convertedTemperature!
+        cell.weatherImageView.image = weatherDataModel.forecasts[indexPath.row].weatherImage
+        
         return cell
     }
 }
