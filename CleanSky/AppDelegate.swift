@@ -7,7 +7,7 @@
 //
 
 import UIKit
-//todo conform that current date = defaults date
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
